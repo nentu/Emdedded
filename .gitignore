@@ -1,12 +1,12 @@
 .settings/
 Debug/
 Drivers/
+docs/
 
 .cproject
 .mxproject
 .project
 .settings
-Core
 Debug
 Drivers
 *cfg
