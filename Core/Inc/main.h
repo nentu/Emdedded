@@ -34,6 +34,7 @@ extern "C" {
 #include "light_utils.h"
 #include "state_list.h"
 #include "btn_driver.h"
+#include "my_gpio.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
