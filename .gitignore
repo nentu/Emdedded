@@ -1,0 +1,16 @@
+.settings/
+Debug/
+Drivers/
+
+.cproject
+.mxproject
+.project
+.settings
+Core
+Debug
+Drivers
+*cfg
+*.ld
+*xlsx
+*.launch
+*.rar
