@@ -87,22 +87,24 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   void switch_color(uint8_t color_id){
-	    if (color_id == STATE_N)
-	    	no_light();
-	    else if (color_id == STATE_G)
-	    	green_light();
-	    else if (color_id == STATE_Y)
-	    	yellow_light();
-	    else if (color_id == STATE_R)
-	    	red_light();
+      if (color_id == STATE_N)
+        no_light();
+      else if (color_id == STATE_G)
+        green_light();
+      else if (color_id == STATE_Y)
+        yellow_light();
+      else if (color_id == STATE_R)
+        red_light();
+        else if (color_id == STATE_RG)
+            red_green_light();
+        else if (color_id == STATE_YG)
+            yellow_green_light();
   }
 
-
   uint32_t state_id = 0;
+  uint32_t color_scheme = 0;
   uint32_t tick_count = 0;
-
-  uint8_t fast_red = 0;
-
+  uint32_t is_clicked = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -112,30 +114,30 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  if (HAL_GetTick() - tick_count >= STEP_PERIOD) {
-		  if ((state_id == 0) && (fast_red == 1)){
-			  state_id = 12; // 3/4 read
-			  fast_red = 0;
-		  }
+    if (HAL_GetTick() - tick_count >= STEP_PERIOD) {
 
-		  switch_color(state_list[state_id]);
-
-		  state_id = (state_id + 1) % 32;
-		  tick_count = HAL_GetTick();
-	  }
+		switch_color(state_list[color_scheme][state_id]);
+		state_id = (state_id + 1) % 10;
+		tick_count = HAL_GetTick();
 
 
-	  GPIO_PinState btn_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
-	  if (btn_state == GPIO_PIN_RESET){
-		  if ((4 <= state_id) & (state_id <= 15)){
-			  state_id = 16;
-		  }else if ((0 <= state_id) & (state_id <= 15) || // Red
-			  (20 <= state_id) & (state_id <= 23) || // Blinking green
-			  (24 <= state_id) & (state_id <= 31) // Yellow
-			  ){
-			  fast_red = 1;
-		  }
-	  }
+	    GPIO_PinState btn_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
+	    if (btn_state == GPIO_PIN_RESET){
+	    	if (is_clicked == 0){
+		    	color_scheme = (color_scheme + 1) % 4;
+		    	state_id = 0;
+	    	}
+	    	is_clicked = 1;
+
+	    }
+	   if (btn_state == GPIO_PIN_SET){
+		   is_clicked = 0;
+	   }
+
+    }
+
+
+
   }
   /* USER CODE END 3 */
 }

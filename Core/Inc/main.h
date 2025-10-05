@@ -47,6 +47,8 @@ extern "C" {
 #define STATE_G 1
 #define STATE_Y 2
 #define STATE_R 3
+#define STATE_RG 4
+#define STATE_YG 5
 
 /* USER CODE END EC */
 

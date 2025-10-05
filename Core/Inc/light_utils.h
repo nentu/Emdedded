@@ -19,6 +19,8 @@ void no_light();
 void green_light();
 void yellow_light();
 void red_light();
+void red_green_light();
+void yellow_green_light();
 
 
 #endif /* INC_LIGHT_UTILS_H_ */
