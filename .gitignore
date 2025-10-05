@@ -1,6 +1,7 @@
 .settings/
 Debug/
 Drivers/
+docs/
 
 .cproject
 .mxproject

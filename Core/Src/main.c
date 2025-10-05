@@ -104,7 +104,6 @@ int main(void)
   uint32_t state_id = 0;
   uint32_t color_scheme = 0;
   uint32_t tick_count = 0;
-  uint32_t is_clicked = 0;
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -120,20 +119,11 @@ int main(void)
 		state_id = (state_id + 1) % 10;
 		tick_count = HAL_GetTick();
 
+    }
 
-	    GPIO_PinState btn_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
-	    if (btn_state == GPIO_PIN_RESET){
-	    	if (is_clicked == 0){
-		    	color_scheme = (color_scheme + 1) % 4;
-		    	state_id = 0;
-	    	}
-	    	is_clicked = 1;
-
-	    }
-	   if (btn_state == GPIO_PIN_SET){
-		   is_clicked = 0;
-	   }
-
+    if (getBtnState() == BTN_CLICKED){
+    	color_scheme = (color_scheme + 1) % 4;
+    	state_id = 0;
     }
 
 
