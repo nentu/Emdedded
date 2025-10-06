@@ -107,7 +107,7 @@ int main(void)
   uint32_t color_scheme = 0;
   uint32_t tick_count = 0;
 
-  char input_symbol;
+  char input_symbol[1];
   char write_buffer[50];
 
   uint32_t scheme_count = 4;
@@ -147,19 +147,19 @@ int main(void)
     }
 
 
-    if (read_char(&input_symbol) == HAL_OK){
-    	parser_res = parser_step(input_symbol);
+    if (read_char(input_symbol) == HAL_OK){
+//    	parser_res = parser_step(input_symbol);
+//
+//    	if (parser_res == PRSR_OK){
+//    		continue;
+//    	} else if (parser_res == UNKNOWN){
+//    		// ругайся
+//    	} else if (parser_res == PRSR_CREATE_SCHEME) {
+//    		parser_buffer
+//    	}
 
-    	if (parser_res == PRSR_OK){
-    		continue;
-    	} else if (parser_res == UNKNOWN){
-    		// ругайся
-    	} else if (parser_res == PRSR_CREATE_SCHEME) {
-    		parser_buffer
-    	}
-
-        sprintf(write_buffer, "Got: ");
-    	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, 1, 100 );
+        sprintf(write_buffer, "Got: '%s'\n", input_symbol);
+    	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
     }
 
   }
