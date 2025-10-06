@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="238pt" height="214pt" viewBox="0.00 0.00 237.57 214.43">
+<g id="graph0" class="graph" transform="scale(1 1) rotate(0) translate(4 210.43)">
+<title>G</title>
+<polygon fill="white" stroke="none" points="-4,4 -4,-210.43 233.57,-210.43 233.57,4 -4,4"/>
+<!-- down -->
+<g id="node1" class="node">
+<title>down</title>
+<polygon fill="none" stroke="black" points="143.14,-36 89.14,-36 89.14,0 143.14,0 143.14,-36"/>
+<text text-anchor="middle" x="116.14" y="-13.8" font-family="Times,serif" font-size="14.00">down</text>
+</g>
+<!-- down&#45;&gt;down -->
+<g id="edge1" class="edge">
+<title>down-&gt;down</title>
+<path fill="none" stroke="green" d="M143.38,-24.74C153.17,-24.89 161.14,-22.64 161.14,-18 161.14,-15.39 158.62,-13.54 154.67,-12.44"/>
+<polygon fill="green" stroke="green" points="155.2,-8.98 144.89,-11.41 154.47,-15.94 155.2,-8.98"/>
+</g>
+<!-- released -->
+<g id="node4" class="node">
+<title>released</title>
+<polygon fill="none" stroke="black" points="61.86,-121.22 0,-121.22 0,-85.22 61.86,-85.22 61.86,-121.22"/>
+<text text-anchor="middle" x="30.93" y="-99.02" font-family="Times,serif" font-size="14.00">released</text>
+</g>
+<!-- down&#45;&gt;released -->
+<g id="edge5" class="edge">
+<title>down-&gt;released</title>
+<path fill="none" stroke="red" d="M97.65,-36.49C85.82,-48.33 70.28,-63.87 57.17,-76.97"/>
+<polygon fill="red" stroke="red" points="55.05,-74.14 50.45,-83.69 60,-79.09 55.05,-74.14"/>
+</g>
+<!-- up -->
+<g id="node2" class="node">
+<title>up</title>
+<polygon fill="none" stroke="black" points="143.14,-206.43 89.14,-206.43 89.14,-170.43 143.14,-170.43 143.14,-206.43"/>
+<text text-anchor="middle" x="116.14" y="-184.23" font-family="Times,serif" font-size="14.00">up</text>
+</g>
+<!-- up&#45;&gt;up -->
+<g id="edge6" class="edge">
+<title>up-&gt;up</title>
+<path fill="none" stroke="red" d="M143.38,-195.17C153.17,-195.32 161.14,-193.07 161.14,-188.43 161.14,-185.82 158.62,-183.97 154.67,-182.87"/>
+<polygon fill="red" stroke="red" points="155.2,-179.41 144.89,-181.84 154.47,-186.37 155.2,-179.41"/>
+</g>
+<!-- clicked -->
+<g id="node3" class="node">
+<title>clicked</title>
+<polygon fill="none" stroke="black" points="229.57,-121.22 173.15,-121.22 173.15,-85.22 229.57,-85.22 229.57,-121.22"/>
+<text text-anchor="middle" x="201.36" y="-99.02" font-family="Times,serif" font-size="14.00">clicked</text>
+</g>
+<!-- up&#45;&gt;clicked -->
+<g id="edge2" class="edge">
+<title>up-&gt;clicked</title>
+<path fill="none" stroke="green" d="M134.63,-169.94C146.47,-158.1 162.01,-142.56 175.11,-129.46"/>
+<polygon fill="green" stroke="green" points="177.24,-132.29 181.83,-122.74 172.29,-127.34 177.24,-132.29"/>
+</g>
+<!-- clicked&#45;&gt;down -->
+<g id="edge3" class="edge">
+<title>clicked-&gt;down</title>
+<path fill="none" stroke="green" d="M182.87,-84.72C171.03,-72.89 155.49,-57.35 142.39,-44.24"/>
+<polygon fill="green" stroke="green" points="145.21,-42.12 135.67,-37.52 140.26,-47.07 145.21,-42.12"/>
+</g>
+<!-- clicked&#45;&gt;released -->
+<g id="edge7" class="edge">
+<title>clicked-&gt;released</title>
+<path fill="none" stroke="red" d="M172.83,-98.02C145.69,-96.23 104.51,-95.99 73.49,-97.28"/>
+<polygon fill="red" stroke="red" points="73.47,-93.78 63.66,-97.78 73.82,-100.77 73.47,-93.78"/>
+</g>
+<!-- released&#45;&gt;up -->
+<g id="edge8" class="edge">
+<title>released-&gt;up</title>
+<path fill="none" stroke="red" d="M49.42,-121.71C61.25,-133.54 76.79,-149.08 89.9,-162.19"/>
+<polygon fill="red" stroke="red" points="87.07,-164.31 96.62,-168.91 92.02,-159.36 87.07,-164.31"/>
+</g>
+<!-- released&#45;&gt;clicked -->
+<g id="edge4" class="edge">
+<title>released-&gt;clicked</title>
+<path fill="none" stroke="green" d="M62.19,-108.58C90.1,-110.26 131.13,-110.41 161.41,-109.03"/>
+<polygon fill="green" stroke="green" points="161.54,-112.53 171.34,-108.49 161.16,-105.54 161.54,-112.53"/>
+</g>
+</g>
+</svg>
