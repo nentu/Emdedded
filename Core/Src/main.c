@@ -106,10 +106,17 @@ int main(void)
   uint32_t state_id = 0;
   uint32_t color_scheme = 0;
   uint32_t tick_count = 0;
+  uint32_t scheme_count = 4;
   uint32_t step_period_array[8];
 
   for (int i = 0; i < 8; i++){
 	  step_period_array[i] = STEP_PERIOD;
+  }
+
+  uint32_t scheme_len_array[8];
+
+  for (int i = 0; i < 8; i++){
+	  scheme_len_array[i] = 10;
   }
 
   /* USER CODE END 2 */
@@ -124,13 +131,13 @@ int main(void)
     if (HAL_GetTick() - tick_count >= step_period_array[color_scheme]) {
 
 		switch_color(state_list[color_scheme][state_id]);
-		state_id = (state_id + 1) % 10;
+		state_id = (state_id + 1) % scheme_len_array[color_scheme];
 		tick_count = HAL_GetTick();
 
     }
 
     if (getBtnState() == BTN_CLICKED){
-    	color_scheme = (color_scheme + 1) % 4;
+    	color_scheme = (color_scheme + 1) % scheme_count;
     	state_id = 0;
 
         char buffer[50];
