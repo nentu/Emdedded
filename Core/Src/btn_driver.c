@@ -4,8 +4,8 @@ uint32_t tick_count = 0;
 uint32_t prevState = BTN_UP;
 
 uint8_t getBtnState(){
-    if (HAL_GetTick() - tick_count < BTN_PERIOD)
-        return prevState;
+//    if (HAL_GetTick() - tick_count < BTN_PERIOD)
+//        return prevState;
     
     GPIO_PinState btn_state = HAL_GPIO_ReadPin(GPIOC, BTN_PIN);
     
