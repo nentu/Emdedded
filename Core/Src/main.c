@@ -148,6 +148,16 @@ int main(void)
 
 
     if (read_char(&input_symbol) == HAL_OK){
+    	parser_res = parser_step(input_symbol);
+
+    	if (parser_res == PRSR_OK){
+    		continue;
+    	} else if (parser_res == UNKNOWN){
+    		// ругайся
+    	} else if (parser_res == PRSR_CREATE_SCHEME) {
+    		parser_buffer
+    	}
+
         sprintf(write_buffer, "Got: ");
     	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, 1, 100 );
     }
