@@ -3,7 +3,7 @@
 
 #include "stm32f4xx_hal.h"
 
-#define BTN_PERIOD 100
+#define BTN_PERIOD 50
 
 #define BTN_DOWN 0
 #define BTN_UP 1
