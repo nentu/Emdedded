@@ -157,7 +157,7 @@ int main(void)
             sprintf(write_buffer, "Incorrect input! Please try again\n");
             HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
     	} else if (parser_res == PRSR_CREATE_SCHEME) {
-            scheme_len_array[5+(inp_scheme%4)]
+            scheme_len_array[5+(inp_scheme%4)] = strlen(parser_buffer);
     		for (int i = 0; i < strlen(parser_buffer); i++){
               switch (parser_buffer[i]){
                 case "y":
