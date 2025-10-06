@@ -7,10 +7,18 @@ bool is_color(char input_symbol){
 	return (input_symbol == 'g' || input_symbol == 'r' || input_symbol == 'y' || input_symbol == 'n');
 }
 
+int append_char(char *str, char ch) {
+    int len = strlen(str);
+    str[len] = ch;
+    str[len + 1] = '\0';
+    return 0;
+}
+
 
 int digit_count = 0;
 enum ParserState cur_state = START;
-char parser_buffer[50];
+char parser_buffer[50] = {0};
+
 
 enum ParserRes failed(){
 	memset(parser_buffer, 0, sizeof(parser_buffer));
@@ -49,6 +57,7 @@ enum ParserRes parser_step(char input_symbol){
 	} else if (cur_state == CRT__) {
 	    if (is_color(input_symbol)) {
 	        cur_state = CRT_DIGIT;
+	    	append_char(parser_buffer, input_symbol);
 	    } else {
 	        return failed();
 	    }
@@ -57,9 +66,11 @@ enum ParserRes parser_step(char input_symbol){
 	    		((input_symbol == '\n') || is_color(input_symbol))
 				&& (digit_count == 8)
 			) {
+	    	append_char(parser_buffer, input_symbol);
 	        cur_state = CRT_EXEC;
 	        return PRSR_CREATE_SCHEME;
 	    } else if (is_color(input_symbol)) {
+	    	append_char(parser_buffer, input_symbol);
 	        digit_count++;
 	    } else {
 	        return failed();
@@ -67,6 +78,7 @@ enum ParserRes parser_step(char input_symbol){
 	} else if (cur_state == CRT_EXEC) {
 	    if (input_symbol >= '0' && input_symbol <= '2') {
 	        cur_state = START;
+	    	append_char(parser_buffer, input_symbol);
 	        return PRSR_PERIOD;
 	    } else {
 	        return failed();
@@ -92,9 +104,11 @@ enum ParserRes parser_step(char input_symbol){
 	} else if (cur_state == CHNG__) {
 	    if (input_symbol >= '0' && input_symbol <= '7') {
 	        cur_state = START;
+	    	append_char(parser_buffer, input_symbol);
 	        return PRSR_CHANGE_SCHEME;
 	    } else if (input_symbol >= 'a' && input_symbol <= 'z') {
 	        cur_state = LINE;
+	    	append_char(parser_buffer, input_symbol);
 	    } else {
 	        return failed();
 	    }
@@ -104,6 +118,7 @@ enum ParserRes parser_step(char input_symbol){
 	    	return PRSR_INTER;
 	    } else if ((input_symbol >= 'a' && input_symbol <= 'z') || (input_symbol == ' ')) {
 	        cur_state = LINE;  // stay in same state
+	    	append_char(parser_buffer, input_symbol);
 	    } else {
 	        return failed();
 	    }
