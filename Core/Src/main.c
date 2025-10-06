@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "usart.h"
 #include "gpio.h"
 
 /* Private includes ----------------------------------------------------------*/
@@ -84,6 +85,7 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
+  MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
 
   void switch_color(uint8_t color_id){
@@ -104,6 +106,12 @@ int main(void)
   uint32_t state_id = 0;
   uint32_t color_scheme = 0;
   uint32_t tick_count = 0;
+  uint32_t step_period_array[8];
+
+  for (int i = 0; i < 8; i++){
+	  step_period_array[i] = STEP_PERIOD;
+  }
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -113,7 +121,7 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    if (HAL_GetTick() - tick_count >= STEP_PERIOD) {
+    if (HAL_GetTick() - tick_count >= step_period_array[color_scheme]) {
 
 		switch_color(state_list[color_scheme][state_id]);
 		state_id = (state_id + 1) % 10;
@@ -124,6 +132,10 @@ int main(void)
     if (getBtnState() == BTN_CLICKED){
     	color_scheme = (color_scheme + 1) % 4;
     	state_id = 0;
+
+        char buffer[50];
+        sprintf(buffer, "Color scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
+    	HAL_UART_Transmit( &huart6, (uint8_t *) buffer, strlen( buffer ), 100 );
     }
 
 

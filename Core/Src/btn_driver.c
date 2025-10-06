@@ -9,7 +9,7 @@ uint8_t getBtnState(){
     
     GPIO_PinState btn_state = HAL_GPIO_ReadPin(GPIOC, BTN_PIN);
     
-    if (btn_state == GPIO_PIN_RESET) { //clicked
+    if (btn_state == GPIO_PIN_RESET) {		//clicked
         if (prevState == BTN_DOWN)
             prevState = BTN_DOWN;
         else if (prevState == BTN_UP)
@@ -18,7 +18,7 @@ uint8_t getBtnState(){
             prevState = BTN_DOWN;
         else if (prevState == BTN_RELEASED)
             prevState = BTN_CLICKED;
-    } else { //released
+    } else { 								//released
         if (prevState == BTN_DOWN)
             prevState = BTN_RELEASED;
         else if (prevState == BTN_UP)
