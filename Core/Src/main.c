@@ -106,8 +106,9 @@ int main(void)
   uint32_t state_id = 0;
   uint32_t color_scheme = 0;
   uint32_t tick_count = 0;
+  uint32_t inp_scheme = 0;
 
-  char input_symbol[1];
+  char input_symbol;
   char write_buffer[50];
 
   uint32_t scheme_count = 4;
@@ -147,29 +148,61 @@ int main(void)
     }
 
 
-    if (read_char(input_symbol) == HAL_OK){
-    	enum ParserRes parser_res = parser_step(input_symbol[0]);
+    if (read_char(&input_symbol) == HAL_OK){
+    	parser_res = parser_step(input_symbol);
 
     	if (parser_res == PRSR_OK){
-    		sprintf(parser_buffer, "OK!'\n");
-			HAL_UART_Transmit( &huart6, (uint8_t *) parser_buffer, strlen( parser_buffer ), 100 );
     		continue;
     	} else if (parser_res == UNKNOWN){
-    		sprintf(write_buffer, "FAILED!'\n");
-			HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+            sprintf(write_buffer, "Incorrect input! Please try again\n");
+            HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
     	} else if (parser_res == PRSR_CREATE_SCHEME) {
-    		sprintf(write_buffer, "CREATE_SCHEME'\n");
-			HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
-    	} else if (parser_res == PRSR_CHANGE_SCHEME) {
-    		sprintf(write_buffer, "CHANGE_SCHEME_NUMBER'\n");
-			HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
-    	} else if (parser_res == PRSR_INTER) {
-    		sprintf(write_buffer, "INTERACTIONS'\n");
-			HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+            scheme_len_array[5+(inp_scheme%4)]
+    		for (int i = 0; i < strlen(parser_buffer); i++){
+              switch (parser_buffer[i]){
+                case "y":
+                  state_list[5+(inp_scheme%4)][i] = STATE_Y;
+                  break;
+                case "r":
+                  state_list[5+(inp_scheme%4)][i] = STATE_R;
+                  break;
+                case "g":
+                  state_list[5+(inp_scheme%4)][i] = STATE_G;
+                  break;
+                case "n":
+                  state_list[5+(inp_scheme%4)][i] = STATE_N;
+                  break;
+              }
+            }
+            sprintf(write_buffer, "Please input LED switching period. Enter 1 for for fast (200 ms), 2 for medium (500 ms), 3 for slow (1000 ms)\n");
+            HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
     	}
+    	else if (parser_res == PRSR_PERIOD){
+          switch (parser_buffer[0]){
+            case 1:
+              step_period_array[5+(inp_scheme%4)] = 200;
+              break;
+            case 2:
+              step_period_array[5+(inp_scheme%4)] = 500;
+              break;
+            case 3:
+              step_period_array[5+(inp_scheme%4)] = 1000;
+              break;
+          }
+          sprintf(write_buffer, "New scheme number: %d\n", (5+(inp_scheme%4)));
+          HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+          inp_scheme += 1;
+        }
+        else if (parser_res == PRSR_CHANGE_SCHEME){
+            color_scheme = parser_buffer[0];
+            state_id = 0;
 
-        sprintf(write_buffer, "Got: '%s'\n", input_symbol);
-    	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+            sprintf(write_buffer, "Color scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
+            HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+        }
+
+        sprintf(write_buffer, "Got: ");
+    	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, 1, 100 );
     }
 
   }
