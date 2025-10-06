@@ -6,7 +6,7 @@
  */
 #include "main.h"
 
-uint8_t state_list[4][10] = {
+uint8_t state_list[8][10] = {
 		{ // Scheme 1
 		    STATE_R,
 		    STATE_G,
@@ -55,6 +55,54 @@ uint8_t state_list[4][10] = {
 		    STATE_N,
 		    STATE_N,
 		    STATE_RG,
+		}
+		{ // Scheme 5
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		}
+		{ // Scheme 6
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		}
+		{ // Scheme 7
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		}
+		{ // Scheme 8
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
+		    STATE_N,
 		}
 
 };
