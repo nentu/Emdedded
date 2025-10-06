@@ -106,15 +106,17 @@ int main(void)
   uint32_t state_id = 0;
   uint32_t color_scheme = 0;
   uint32_t tick_count = 0;
+
+  char read_buffer[50];
+  char write_buffer[50];
+
   uint32_t scheme_count = 4;
   uint32_t step_period_array[8];
-
   for (int i = 0; i < 8; i++){
 	  step_period_array[i] = STEP_PERIOD;
   }
 
   uint32_t scheme_len_array[8];
-
   for (int i = 0; i < 8; i++){
 	  scheme_len_array[i] = 10;
   }
@@ -140,12 +142,15 @@ int main(void)
     	color_scheme = (color_scheme + 1) % scheme_count;
     	state_id = 0;
 
-        char buffer[50];
-        sprintf(buffer, "Color scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
-    	HAL_UART_Transmit( &huart6, (uint8_t *) buffer, strlen( buffer ), 100 );
+        sprintf(write_buffer, "Color scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
+    	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
     }
 
 
+    if (HAL_UART_Receive(&huart6, (uint8_t *) read_buffer, 1, 10) == HAL_OK){
+        sprintf(write_buffer, "Got: %s", read_buffer);
+    	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+    }
 
   }
   /* USER CODE END 3 */
