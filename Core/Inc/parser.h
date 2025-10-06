@@ -3,23 +3,26 @@
 
 // State list
 
-#define CHNG_E 0
-#define CHNG_S 1
-#define CHNG_T 2
-#define CHNG__ 3
-#define CRT_DIGIT 4
-#define CRT_E 5
-#define CRT_N 6
-#define CRT_W 7
-#define CRT__ 8
-#define LINE 9
-#define START 10
+enum ParserState{
+	CHNG_E,
+	CHNG_S,
+	CHNG_T,
+	CHNG__,
+	CRT_DIGIT,
+	CRT_E,
+	CRT_N,
+	CRT_W,
+	CRT__,
+	LINE,
+	START
+};
 
 
 enum ParserRes{
 	PRSR_CREATE_SCHEME,
 	PRSR_CHANGE_SCHEME,
 	PRSR_INTER,
+	PRSR_PERIOD,
 	PRSR_OK,
 	UNKNOWN
 };
