@@ -35,6 +35,8 @@ extern "C" {
 #include "state_list.h"
 #include "btn_driver.h"
 #include "my_gpio.h"
+#include "uart_io.h"
+#include "parser.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

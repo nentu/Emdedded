@@ -21,12 +21,12 @@ enum ParserRes{
 	PRSR_CHANGE_SCHEME,
 	PRSR_INTER,
 	PRSR_OK,
-	ERROR,
+	UNKNOWN
 };
 
 
 extern char parser_buffer[50];
 
-ParserRes parser_step(char input_symbol);
+enum ParserRes parser_step(char input_symbol);
 
 #endif

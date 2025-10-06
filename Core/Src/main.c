@@ -107,7 +107,7 @@ int main(void)
   uint32_t color_scheme = 0;
   uint32_t tick_count = 0;
 
-  char read_buffer[50];
+  char input_symbol;
   char write_buffer[50];
 
   uint32_t scheme_count = 4;
@@ -147,9 +147,9 @@ int main(void)
     }
 
 
-    if (HAL_UART_Receive(&huart6, (uint8_t *) read_buffer, 1, 10) == HAL_OK){
-        sprintf(write_buffer, "Got: %s", read_buffer);
-    	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+    if (read_char(&input_symbol) == HAL_OK){
+        sprintf(write_buffer, "Got: ");
+    	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, 1, 100 );
     }
 
   }
