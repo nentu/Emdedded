@@ -55,7 +55,7 @@ uint8_t state_list[8][10] = {
 		    STATE_N,
 		    STATE_N,
 		    STATE_RG,
-		}
+		},
 		{ // Scheme 5
 		    STATE_N,
 		    STATE_N,
@@ -67,7 +67,7 @@ uint8_t state_list[8][10] = {
 		    STATE_N,
 		    STATE_N,
 		    STATE_N,
-		}
+		},
 		{ // Scheme 6
 		    STATE_N,
 		    STATE_N,
@@ -79,7 +79,7 @@ uint8_t state_list[8][10] = {
 		    STATE_N,
 		    STATE_N,
 		    STATE_N,
-		}
+		},
 		{ // Scheme 7
 		    STATE_N,
 		    STATE_N,
@@ -91,7 +91,7 @@ uint8_t state_list[8][10] = {
 		    STATE_N,
 		    STATE_N,
 		    STATE_N,
-		}
+		},
 		{ // Scheme 8
 		    STATE_N,
 		    STATE_N,

@@ -10,6 +10,7 @@ enum ParserState{
 	CHNG__,
 	CRT_DIGIT,
 	CRT_E,
+	CRT_EXEC,
 	CRT_N,
 	CRT_W,
 	CRT__,
