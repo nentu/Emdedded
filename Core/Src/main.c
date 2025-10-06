@@ -148,15 +148,25 @@ int main(void)
 
 
     if (read_char(input_symbol) == HAL_OK){
-//    	parser_res = parser_step(input_symbol);
-//
-//    	if (parser_res == PRSR_OK){
-//    		continue;
-//    	} else if (parser_res == UNKNOWN){
-//    		// ругайся
-//    	} else if (parser_res == PRSR_CREATE_SCHEME) {
-//    		parser_buffer
-//    	}
+    	enum ParserRes parser_res = parser_step(input_symbol[0]);
+
+    	if (parser_res == PRSR_OK){
+    		sprintf(parser_buffer, "OK!'\n");
+			HAL_UART_Transmit( &huart6, (uint8_t *) parser_buffer, strlen( parser_buffer ), 100 );
+    		continue;
+    	} else if (parser_res == UNKNOWN){
+    		sprintf(write_buffer, "FAILED!'\n");
+			HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+    	} else if (parser_res == PRSR_CREATE_SCHEME) {
+    		sprintf(write_buffer, "CREATE_SCHEME'\n");
+			HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+    	} else if (parser_res == PRSR_CHANGE_SCHEME) {
+    		sprintf(write_buffer, "CHANGE_SCHEME_NUMBER'\n");
+			HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+    	} else if (parser_res == PRSR_INTER) {
+    		sprintf(write_buffer, "INTERACTIONS'\n");
+			HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+    	}
 
         sprintf(write_buffer, "Got: '%s'\n", input_symbol);
     	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
