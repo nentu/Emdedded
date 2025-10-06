@@ -109,7 +109,7 @@ int main(void)
   uint32_t inp_scheme = 0;
 
   char input_symbol[1];
-  char write_buffer[50];
+  char write_buffer[100];
 
   uint32_t scheme_count = 4;
   uint32_t step_period_array[8];
@@ -149,13 +149,13 @@ int main(void)
 
 
     if (read_char(input_symbol) == HAL_OK){
-    	HAL_UART_Transmit( &huart6, (uint8_t *) input_symbol, 1, 100 );
+    	HAL_UART_Transmit( &huart6, (uint8_t *) input_symbol, 1, 50 );
     	enum ParserRes parser_res = parser_step(input_symbol[0]);
 
     	if (parser_res == PRSR_OK){
-            sprintf(write_buffer, "OK\n");
+
             HAL_UART_Transmit( &huart6, (uint8_t *) parser_buffer, strlen( parser_buffer ), 100 );
-//    		continue;
+    		continue;
     	} else if (parser_res == UNKNOWN){
             sprintf(write_buffer, "\nIncorrect input! Please try again\n");
             HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
@@ -180,9 +180,10 @@ int main(void)
 
             sprintf(write_buffer, "\nPlease input LED switching period. Enter 1 for for fast (200 ms), 2 for medium (500 ms), 3 for slow (1000 ms)\n");
             HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+            clear_buffer();
     	}
     	else if (parser_res == PRSR_PERIOD){
-         switch (parser_buffer[0]){
+         switch (parser_buffer[0] - '0'){
            case 1:
              step_period_array[5+(inp_scheme%4)] = 200;
              break;
@@ -196,13 +197,15 @@ int main(void)
           sprintf(write_buffer, "\nNew scheme number: %d\n", (5+(inp_scheme%4)));
           HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
           inp_scheme += 1;
+          clear_buffer();
         }
         else if (parser_res == PRSR_CHANGE_SCHEME){
-           color_scheme = parser_buffer[0];
+           color_scheme = parser_buffer[0] - '0';
            state_id = 0;
 
             sprintf(write_buffer, "\nColor scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
             HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+            clear_buffer();
         }
 
 //        sprintf(write_buffer, "%s", input_symbol);

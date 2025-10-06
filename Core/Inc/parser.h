@@ -33,4 +33,6 @@ extern char parser_buffer[50];
 
 enum ParserRes parser_step(char input_symbol);
 
+void clear_buffer();
+
 #endif

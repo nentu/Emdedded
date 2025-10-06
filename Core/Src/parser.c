@@ -19,9 +19,12 @@ int digit_count = 0;
 enum ParserState cur_state = START;
 char parser_buffer[50] = {0};
 
+void clear_buffer(){
+	memset(parser_buffer, 0, sizeof(parser_buffer));
+}
 
 enum ParserRes failed(){
-	memset(parser_buffer, 0, sizeof(parser_buffer));
+	clear_buffer();
 	digit_count = 0;
 	cur_state = START;
 	return UNKNOWN;
@@ -62,11 +65,8 @@ enum ParserRes parser_step(char input_symbol){
 	        return failed();
 	    }
 	} else if (cur_state == CRT_DIGIT) {
-	    if (
-	    		((input_symbol == '\n') || is_color(input_symbol))
-				&& (digit_count == 8)
-			) {
-	    	append_char(parser_buffer, input_symbol);
+	    if (input_symbol == '\n') {
+	    	digit_count = 0;
 	        cur_state = CRT_EXEC;
 	        return PRSR_CREATE_SCHEME;
 	    } else if (is_color(input_symbol)) {
@@ -76,7 +76,9 @@ enum ParserRes parser_step(char input_symbol){
 	        return failed();
 	    }
 	} else if (cur_state == CRT_EXEC) {
-	    if (input_symbol >= '0' && input_symbol <= '2') {
+		char string[] = "\nStart CTR_EXEC\n";
+        HAL_UART_Transmit( &huart6, (uint8_t *) string, strlen( string ), 100 );
+	    if (input_symbol >= '1' && input_symbol <= '3') {
 	        cur_state = START;
 	    	append_char(parser_buffer, input_symbol);
 	        return PRSR_PERIOD;
@@ -124,6 +126,12 @@ enum ParserRes parser_step(char input_symbol){
 	    }
 	} else {
 	    return failed();
+	}
+
+	if (digit_count == 7){
+		digit_count = 0;
+        cur_state = CRT_EXEC;
+		return PRSR_CREATE_SCHEME;
 	}
 
 	return PRSR_OK;
