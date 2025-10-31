@@ -64,7 +64,7 @@ enum ParserRes parser_step(char input_symbol){
 	        return failed();
 	    }
 	} else if (cur_state == CRT_DIGIT) {
-	    if (input_symbol == '\n') {
+	    if (input_symbol == '\r') {
 	    	digit_count = 0;
 	        cur_state = CRT_EXEC;
 	        return PRSR_CREATE_SCHEME;
