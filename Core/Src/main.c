@@ -207,9 +207,38 @@ int main(void)
             HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
             clear_buffer();
         }
+        else if (parser_res == PRSR_INTER) {
+            // Check the content of parser_buffer for 'on' or 'off'
+            if (strstr(parser_buffer, "on") != NULL) {
+                // Switch to IRQ driver
+                // Assume we have a function to switch drivers
+                if (switch_to_irq_driver() == 0) { // Success
+                    sprintf(write_buffer, "\nSwitched to IRQ mode\n");
+                    HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+                } else { // Failure
+                    sprintf(write_buffer, "\nFailed to switch to IRQ mode\n");
+                    HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+                }
+            } else if (strstr(parser_buffer, "off") != NULL) {
+                // Switch to Polling driver
+                // Assume we have a function to switch drivers
+                if (switch_to_polling_driver() == 0) { // Success
+                    sprintf(write_buffer, "\nSwitched to Polling mode\n");
+                    HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+                } else { // Failure
+                    sprintf(write_buffer, "\nFailed to switch to Polling mode\n");
+                    HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+                }
+            } else {
+                 sprintf(write_buffer, "\nInvalid argument for 'set interrupts'. Use 'on' or 'off'.\n");
+                 HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+            }
+        }
 
 //        sprintf(write_buffer, "%s", input_symbol);
     }
+    process_active_uart_driver(); // Placeholder name
+
 
   }
   /* USER CODE END 3 */

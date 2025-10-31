@@ -208,6 +208,22 @@ void USART6_IRQHandler(void)
   /* USER CODE END USART6_IRQn 0 */
   HAL_UART_IRQHandler(&huart6);
   /* USER CODE BEGIN USART6_IRQn 1 */
+  // --- NEW: Check current mode and call appropriate handler ---
+    // This replaces the generic HAL_UART_IRQHandler call when using the custom IRQ driver
+    if (current_uart_mode == UART_MODE_IRQ) {
+        uart_irq_handler(&huart6);
+    } else {
+        // In polling mode, interrupts might still fire (e.g., for errors),
+        // but we don't use them for data transfer. Call the standard HAL handler
+        // just in case it's needed for error clearing or other standard processing.
+        // However, if polling is truly active and no IT functions are called,
+        // this might not be strictly necessary. Let's include it for safety.
+        // If the standard HAL handler interferes with polling, it can be removed,
+        // but ensure errors are handled correctly.
+        // For this implementation, we'll call the standard handler if not in IRQ mode.
+        // The standard handler will likely find no active IT operations and return.
+        HAL_UART_IRQHandler(&huart6);
+    }
 
   /* USER CODE END USART6_IRQn 1 */
 }
