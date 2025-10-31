@@ -217,7 +217,7 @@ int main(void)
         }
         else if (parser_res == PRSR_INTER) {
             // Check the content of parser_buffer for 'on' or 'off'
-            if (strstr(parser_buffer, "on") != NULL) {
+            if (strstr(parser_buffer, "interrupts on") != NULL) {
                 // Switch to IRQ driver
                 // Assume we have a function to switch drivers
                 if (switch_to_irq_driver() == 0) { // Success
@@ -227,7 +227,7 @@ int main(void)
                     sprintf(write_buffer, "\nFailed to switch to IRQ mode\n");
                     HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
                 }
-            } else if (strstr(parser_buffer, "off") != NULL) {
+            } else if (strstr(parser_buffer, "interrupts off") != NULL) {
                 // Switch to Polling driver
                 // Assume we have a function to switch drivers
                 if (switch_to_polling_driver() == 0) { // Success
