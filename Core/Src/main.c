@@ -147,8 +147,16 @@ int main(void)
     	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
     }
 
-
-    if (read_char_nonblocking(input_symbol) == HAL_OK){
+    HAL_StatusTypeDef read_res = read_char_nonblocking(input_symbol);
+    if (read_res == HAL_ERROR){
+      sprintf(write_buffer, "HAL_ERROR\n");
+      HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+    }
+    else if (read_res == HAL_BUSY){
+      sprintf(write_buffer, "HAL_BUSY\n");
+      HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+    }
+    else if (read_res == HAL_OK){
     	HAL_UART_Transmit( &huart6, (uint8_t *) input_symbol, 1, 50 );
     	enum ParserRes parser_res = parser_step(input_symbol[0]);
 

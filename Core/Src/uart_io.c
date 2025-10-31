@@ -45,6 +45,7 @@ int8_t switch_to_polling_driver(void) {
 }
 
 HAL_StatusTypeDef read_char_nonblocking(char* io_char) {
+
     if (!io_char) return HAL_ERROR;
 
     if (current_uart_mode == UART_MODE_POLLING) {

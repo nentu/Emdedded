@@ -1,7 +1,8 @@
 #include "uart_driver_irq.h"
 #include <string.h>
 #include <stdio.h> // For debug prints if needed
-
+#include "stm32f4xx_hal.h"
+#include "usart.h"
 
 static UART_HandleTypeDef* huart_handle = NULL;
 static char rx_buffer[UART_IRQ_RX_BUFFER_SIZE];
@@ -46,6 +47,9 @@ int8_t uart_irq_init(UART_HandleTypeDef* huart) {
     rx_overflow = false;
     tx_busy = false;
 
+    char write_buffer[100];
+    sprintf(write_buffer, "Start interation\n");
+    HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
     // Start receiving the first byte in interrupt mode
     // This primes the interrupt to fire when the first byte arrives
     if (HAL_UART_Receive_IT(huart_handle, (uint8_t*)&rx_buffer[rx_head], 1) != HAL_OK) {
@@ -56,9 +60,11 @@ int8_t uart_irq_init(UART_HandleTypeDef* huart) {
 }
 
 int8_t uart_irq_send_char(char c) {
+
     if (!huart_handle || buffer_is_full(tx_head, tx_tail, UART_IRQ_TX_BUFFER_SIZE)) {
         return UART_IRQ_BUFFER_FULL;
     }
+    
 
     tx_buffer[tx_head] = c;
     tx_head = buffer_increment(tx_head, UART_IRQ_TX_BUFFER_SIZE);
@@ -141,6 +147,12 @@ void uart_irq_process() {
 }
 
 void uart_irq_handler(UART_HandleTypeDef *huart) {
+
+    char write_buffer[100];
+    sprintf(write_buffer, "Got interation\n");
+    HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+
+
     if (huart != huart_handle) {
         // This interrupt is not for our driver instance
         return;
