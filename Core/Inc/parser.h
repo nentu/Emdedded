@@ -1,6 +1,6 @@
 #ifndef __Parser_H
 #define __Parser_H
-
+#include "usart.h"
 // State list
 
 enum ParserState{

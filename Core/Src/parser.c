@@ -2,7 +2,6 @@
 
 #include "parser.h"
 
-
 bool is_color(char input_symbol){
 	return (input_symbol == 'g' || input_symbol == 'r' || input_symbol == 'y' || input_symbol == 'n');
 }
