@@ -1,8 +1,14 @@
 #include "uart_io.h"
 #include <string.h> // For strlen if needed elsewhere
 
+// --- NEW: Define current_uart_mode globally (not static) ---
+UartMode_t current_uart_mode = UART_MODE_POLLING;
+// --- END NEW ---
+
 void init_uart_driver(UartMode_t mode) {
     if (mode == UART_MODE_IRQ) {
+        // Ensure no ongoing IT operations before initializing IRQ driver
+        HAL_UART_Abort_IT(&huart6);
         if (uart_irq_init(&huart6) == UART_IRQ_OK) {
             current_uart_mode = UART_MODE_IRQ;
         } else {
@@ -22,6 +28,10 @@ int8_t switch_to_irq_driver(void) {
         return 0; // Already in IRQ mode
     }
     // Deinitialize polling mode resources if any (HAL handles hardware state)
+    // Abort any ongoing IT transfers that might have been started by polling driver accidentally
+    // This is crucial before initializing the IRQ driver
+    HAL_UART_Abort_IT(&huart6); // Abort any potential IT transfers
+
     // Initialize IRQ mode
     if (uart_irq_init(&huart6) == UART_IRQ_OK) {
         current_uart_mode = UART_MODE_IRQ;
@@ -35,10 +45,9 @@ int8_t switch_to_polling_driver(void) {
         return 0; // Already in Polling mode
     }
     // Deinitialize IRQ mode resources (stop ongoing transfers, clear buffers)
-    // This is tricky with HAL. We need to ensure no IT transfers are pending.
-    // Let's assume deinit/init of HAL handle or just stop IT transfers.
-    HAL_UART_Abort_IT(&huart6); // Abort any ongoing IT transfers
-    // Reset IRQ driver state variables (if any external state needs reset)
+    // Let the IRQ driver handle clearing its own buffers via its process function if needed
+    // Abort any ongoing IT transfers started by the IRQ driver
+    HAL_UART_Abort_IT(&huart6); // Stop ongoing IT transfers
     // Reinitialize hardware for polling (it's already initialized)
     current_uart_mode = UART_MODE_POLLING;
     return 0; // Success
@@ -71,9 +80,3 @@ void process_active_uart_driver(void) {
     // Polling mode typically doesn't need processing in the main loop
     // as it handles everything synchronously during calls.
 }
-
-// --- OLD FUNCTION (can be kept if needed for other parts, but main uses read_char_nonblocking now) ---
-// HAL_StatusTypeDef read_char(char* io_char){
-//     return HAL_UART_Receive(&huart6, (uint8_t *) io_char, 1, 1000); // Blocking
-// }
-// --- END OLD FUNCTION ---
