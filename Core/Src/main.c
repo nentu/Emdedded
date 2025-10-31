@@ -148,7 +148,7 @@ int main(void)
     }
 
 
-    if (read_char(input_symbol) == HAL_OK){
+    if (read_char_nonblocking(input_symbol) == HAL_OK){
     	HAL_UART_Transmit( &huart6, (uint8_t *) input_symbol, 1, 50 );
     	enum ParserRes parser_res = parser_step(input_symbol[0]);
 

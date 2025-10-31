@@ -12,6 +12,9 @@ typedef enum {
 } UartMode_t;
 // --- END NEW ---
 
+
+// --- NEW: Global variable to track current mode ---
+static UartMode_t current_uart_mode = UART_MODE_POLLING;
 // Function to initialize the selected driver
 void init_uart_driver(UartMode_t mode);
 

@@ -1,10 +1,6 @@
 #include "uart_io.h"
 #include <string.h> // For strlen if needed elsewhere
 
-// --- NEW: Global variable to track current mode ---
-static UartMode_t current_uart_mode = UART_MODE_POLLING;
-// --- END NEW ---
-
 void init_uart_driver(UartMode_t mode) {
     if (mode == UART_MODE_IRQ) {
         if (uart_irq_init(&huart6) == UART_IRQ_OK) {
