@@ -114,7 +114,7 @@ enum ParserRes parser_step(char input_symbol){
 	        return failed();
 	    }
 	} else if (cur_state == LINE) {
-	    if (input_symbol == '\n') {
+	    if (input_symbol == '\r') {
 	        cur_state = START;
 	    	return PRSR_INTER;
 	    } else if ((input_symbol >= 'a' && input_symbol <= 'z') || (input_symbol == ' ')) {

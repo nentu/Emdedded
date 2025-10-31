@@ -154,7 +154,7 @@ int main(void)
 
     	if (parser_res == PRSR_OK){
 
-            HAL_UART_Transmit( &huart6, (uint8_t *) parser_buffer, strlen( parser_buffer ), 100 );
+//            HAL_UART_Transmit( &huart6, (uint8_t *) parser_buffer, strlen( parser_buffer ), 100 );
     		continue;
     	} else if (parser_res == UNKNOWN){
             sprintf(write_buffer, "\nIncorrect input! Please try again\n");
