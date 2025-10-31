@@ -205,9 +205,6 @@ void SysTick_Handler(void)
 void USART6_IRQHandler(void)
 {
   /* USER CODE BEGIN USART6_IRQn 0 */
-	char write_buffer[100];
-	sprintf(write_buffer, "Got USART6_IRQHandler\n");
-	HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
     // --- NEW: Check current mode and call appropriate handler ---
     // This replaces the generic HAL_UART_IRQHandler call when using the custom IRQ driver
     if (current_uart_mode == UART_MODE_IRQ) {
