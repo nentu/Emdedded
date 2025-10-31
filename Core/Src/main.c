@@ -109,7 +109,7 @@ int main(void)
   uint32_t inp_scheme = 0;
 
   char input_symbol[1];
-  char write_buffer[100];
+  char write_buffer[200];
 
   uint32_t scheme_count = 4;
   uint32_t step_period_array[8];
@@ -144,29 +144,34 @@ int main(void)
     	state_id = 0;
 
       sprintf(write_buffer, "\nColor scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
-    	HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+    	
+          write_string(write_buffer);
     }
 
-    HAL_StatusTypeDef read_res = read_char_nonblocking(input_symbol);
+    HAL_StatusTypeDef read_res = read_char(input_symbol);
     if (read_res == HAL_ERROR){
       sprintf(write_buffer, "HAL_ERROR\n");
-      HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+      
+          write_string(write_buffer);
     }
     else if (read_res == HAL_BUSY){
       sprintf(write_buffer, "HAL_BUSY\n");
-      HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+      
+          write_string(write_buffer);
     }
     else if (read_res == HAL_OK){
-    	HAL_UART_Transmit( &huart6, (uint8_t *) input_symbol, 1, 50 );
+    	
+        write_string_len(input_symbol, 1);
     	enum ParserRes parser_res = parser_step(input_symbol[0]);
 
     	if (parser_res == PRSR_OK){
 
-//            HAL_UART_Transmit( &huart6, (uint8_t *) parser_buffer, strlen( parser_buffer ), 100 );
+//            
     		continue;
     	} else if (parser_res == UNKNOWN){
             sprintf(write_buffer, "\nIncorrect input! Please try again\n");
-            HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+            
+          write_string(write_buffer);
     	} else if (parser_res == PRSR_CREATE_SCHEME) {
             scheme_len_array[4+(inp_scheme%4)] = strlen(parser_buffer);
     		for (int i = 0; i < strlen(parser_buffer); i++){
@@ -187,7 +192,8 @@ int main(void)
             }
 
             sprintf(write_buffer, "\nPlease input LED switching period. Enter 1 for for fast (200 ms), 2 for medium (500 ms), 3 for slow (1000 ms)\n");
-            HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+            
+          write_string(write_buffer);
             clear_buffer();
     	}
     	else if (parser_res == PRSR_PERIOD){
@@ -203,7 +209,8 @@ int main(void)
              break;
          }
           sprintf(write_buffer, "\nNew scheme number: %d\n", (4+(inp_scheme%4)));
-          HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
+          
+          write_string(write_buffer);
           inp_scheme += 1;
           clear_buffer();
         }
@@ -211,35 +218,41 @@ int main(void)
            color_scheme = parser_buffer[0] - '0';
            state_id = 0;
 
-            sprintf(write_buffer, "\nColor scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
-            HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
-            clear_buffer();
+          sprintf(write_buffer, "\nColor scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
+          
+          write_string(write_buffer);
+          clear_buffer();
         }
         else if (parser_res == PRSR_INTER) {
             // Check the content of parser_buffer for 'on' or 'off'
-            if (strstr(parser_buffer, "interrupts on") != NULL) {
+            if (strstr(parser_buffer, "on") != NULL) {
                 // Switch to IRQ driver
                 // Assume we have a function to switch drivers
                 if (switch_to_irq_driver() == 0) { // Success
-                    sprintf(write_buffer, "\nSwitched to IRQ mode\n");
-                    HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+                    sprintf(write_buffer, "Switched to IRQ mode\n");
+                    
+          write_string(write_buffer);
                 } else { // Failure
                     sprintf(write_buffer, "\nFailed to switch to IRQ mode\n");
-                    HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+                    
+          write_string(write_buffer);
                 }
-            } else if (strstr(parser_buffer, "interrupts off") != NULL) {
+            } else if (strstr(parser_buffer, "off") != NULL) {
                 // Switch to Polling driver
                 // Assume we have a function to switch drivers
                 if (switch_to_polling_driver() == 0) { // Success
                     sprintf(write_buffer, "\nSwitched to Polling mode\n");
-                    HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+                    
+          write_string(write_buffer);
                 } else { // Failure
                     sprintf(write_buffer, "\nFailed to switch to Polling mode\n");
-                    HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+                    
+          write_string(write_buffer);
                 }
             } else {
                  sprintf(write_buffer, "\nInvalid argument for 'set interrupts'. Use 'on' or 'off'.\n");
-                 HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
+          write_string(write_buffer);
+                 
             }
         }
 

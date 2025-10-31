@@ -15,6 +15,8 @@ static volatile uint16_t tx_head = 0;
 static volatile uint16_t tx_tail = 0;
 static volatile bool tx_busy = false;
 
+char write_buffer[200];
+
 // --- Helper Functions ---
 static uint16_t buffer_increment(uint16_t idx, uint16_t size) {
     return (idx + 1) % size;
@@ -69,17 +71,39 @@ int8_t uart_irq_send_char(char c) {
         return UART_IRQ_BUFFER_FULL;
     }
     
+    HAL_UART_Transmit( &huart6, "sending char", strlen("sending char"), 200);
 
     tx_buffer[tx_head] = c;
     tx_head = buffer_increment(tx_head, UART_IRQ_TX_BUFFER_SIZE);
+    HAL_UART_Transmit( &huart6, "buffer_increment", strlen("buffer_increment"), 200);
 
     // If transmission is not ongoing, start it
     if (!tx_busy) {
         tx_busy = true;
-        if (HAL_UART_Transmit_IT(huart_handle, (uint8_t*)&tx_buffer[tx_tail], 1) != HAL_OK) {
+        HAL_UART_Transmit( &huart6, "buffer free: ", strlen("buffer free: "), 200);
+        sprintf(write_buffer, "\n tx_head: %d,tx_tail: %d, tx_busy: %d, char: '%c'\n", tx_head, tx_tail, tx_busy, c );
+        HAL_UART_Transmit( &huart6, write_buffer, strlen(write_buffer), 200);
+
+        HAL_StatusTypeDef res = HAL_UART_Transmit_IT(&huart6, (uint8_t*) &c, 1);
+        if (res == HAL_ERROR){
+            HAL_UART_Transmit( &huart6, "HAL_ERROR", strlen("HAL_ERROR"), 200);
+        } else if (res == HAL_BUSY){
+            HAL_UART_Transmit( &huart6, "HAL_BUSY", strlen("HAL_BUSY"), 200);
+        } else if (res == HAL_TIMEOUT){
+            HAL_UART_Transmit( &huart6, "HAL_TIMEOUT", strlen("HAL_TIMEOUT"), 200);
+        } 
+        if (res != HAL_OK) {
             tx_busy = false; // Reset flag on error
-            return UART_IRQ_ERROR;
+
+            uint16_t start_tx_index = tx_tail; // Capture the index of the character to send NOW
+
+            if (HAL_UART_Transmit_IT(huart_handle, (uint8_t*)&tx_buffer[start_tx_index], 1) != HAL_OK) {
+                tx_busy = false; // Reset flag on error
+                return UART_IRQ_ERROR;
+            }
         }
+        HAL_UART_Transmit( &huart6, "send ok", strlen("send ok"), 200);
+
     }
     return UART_IRQ_OK;
 }
@@ -187,28 +211,35 @@ void uart_irq_handler(UART_HandleTypeDef *huart) {
             // For simulation purposes, we'll just stop trying to restart.
             // In a real system, you'd want to handle this more gracefully.
             // Example: static bool rx_error = false; rx_error = true;
-            // Then, read_char_nonblocking could return an error if rx_error is set.
+            // Then, read_char could return an error if rx_error is set.
         }
         // --- END IMPROVED ---
+
     }
 
     // Handle Transmit Interrupt
     if (__HAL_UART_GET_FLAG(huart, UART_FLAG_TC) && __HAL_UART_GET_IT_SOURCE(huart, UART_IT_TC)) {
-        // Transmission Complete
-        if (!buffer_is_empty(tx_head, tx_tail)) {
-            // There are more bytes to send
+        // Transmission Complete for the *current* byte
+        // The byte that was pointed to by tx_tail when HAL_UART_Transmit_IT was called is now complete.
+        // So, we must advance tx_tail now to point to the next byte to be sent.
+        tx_tail = buffer_increment(tx_tail, UART_IRQ_TX_BUFFER_SIZE); // NEW: Move tail forward FIRST
+
+        if (!buffer_is_empty(tx_head, tx_tail)) { // Are there more bytes in our buffer?
+            // Yes, there are more bytes to send
+            // tx_tail now points to the next byte to send
             if (HAL_UART_Transmit_IT(huart_handle, (uint8_t*)&tx_buffer[tx_tail], 1) == HAL_OK) {
-                tx_tail = buffer_increment(tx_tail, UART_IRQ_TX_BUFFER_SIZE);
+                // HAL_UART_Transmit_IT scheduled for the next byte
+                // tx_tail already points to the byte scheduled
             } else {
-                 // Error starting next transmission - handle if necessary
-                 tx_busy = false; // Reset busy flag on error
+                 // Error starting *next* transmission
+                 tx_busy = false; // Reset busy flag on error - CRITICAL
                  // Could set an error flag or log the error
+                 // The transmission chain is broken.
             }
         } else {
-            // No more bytes to send, transmission is complete
-            tx_busy = false;
-            // Disable TC interrupt to prevent repeated triggering if desired
-            // __HAL_UART_DISABLE_IT(huart, UART_IT_TC);
+            // No more bytes to send in our buffer
+            tx_busy = false; // Correctly reset the busy flag
+            // Disable TC interrupt if desired (not done here)
         }
     }
 

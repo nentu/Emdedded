@@ -30,8 +30,21 @@ int8_t switch_to_irq_driver(void) {
     // Deinitialize polling mode resources if any (HAL handles hardware state)
     // Abort any ongoing IT transfers that might have been started by polling driver accidentally
     // This is crucial before initializing the IRQ driver
-    HAL_UART_Abort_IT(&huart6); // Abort any potential IT transfers
+    HAL_UART_Abort_IT(&huart6);
 
+    // Wait for the driver to become READY. This is crucial.
+    uint32_t start_tick = HAL_GetTick();
+    while (huart6.gState != HAL_UART_STATE_READY) {
+        // Add a timeout to prevent infinite loop in case of hardware error
+        if ((HAL_GetTick() - start_tick) > 100) { // 100 ms timeout
+            // If it doesn't become ready, something is wrong.
+            // For now, we'll force the state to READY as a last resort.
+            // This is a bit of a hack but can recover from a stuck state.
+            // A more robust system would handle this error properly.
+            huart6.gState = HAL_UART_STATE_READY;
+            break;
+        }
+    }
     // Initialize IRQ mode
     if (uart_irq_init(&huart6) == UART_IRQ_OK) {
         current_uart_mode = UART_MODE_IRQ;
@@ -53,7 +66,7 @@ int8_t switch_to_polling_driver(void) {
     return 0; // Success
 }
 
-HAL_StatusTypeDef read_char_nonblocking(char* io_char) {
+HAL_StatusTypeDef read_char(char* io_char) {
 
     if (!io_char) return HAL_ERROR;
 
@@ -73,6 +86,42 @@ HAL_StatusTypeDef read_char_nonblocking(char* io_char) {
         }
     }
 }
+
+
+HAL_StatusTypeDef write_string_len(const char* string, size_t str_len) {
+
+    if (!string) return HAL_ERROR;
+
+    if (current_uart_mode == UART_MODE_POLLING) {
+        // Use the original polling method, but make it truly non-blocking
+        // HAL_UART_Receive with 0 timeout returns immediately if no data
+        HAL_UART_Transmit( &huart6, (uint8_t *) string, str_len, 200 );
+
+    } else { // UART_MODE_IRQ
+        // Use the IRQ driver's buffer check
+        HAL_UART_Transmit( &huart6, "HAL_GOT", strlen("HAL_GOT"), 200);
+        int8_t res = uart_irq_send_string(string);
+        if (res == UART_IRQ_OK) {
+            HAL_UART_Transmit( &huart6, "HAL_OK", strlen("HAL_OK"), 200);
+            return HAL_OK; // Map success
+        } else if (res == UART_IRQ_BUFFER_EMPTY) {
+            return HAL_TIMEOUT; // Map empty buffer to timeout for consistency
+            HAL_UART_Transmit( &huart6, "HAL_TIMEOUT", strlen("HAL_TIMEOUT"), 200);
+
+        } else {
+            return HAL_ERROR; // Map other errors
+            HAL_UART_Transmit( &huart6, "HAL_ERROR", strlen("HAL_ERROR"), 200);
+
+        }
+    }
+}
+
+
+HAL_StatusTypeDef write_string(const char* string) {
+    write_string_len(string, strlen(string));
+}
+
+
 
 void process_active_uart_driver(void) {
     if (current_uart_mode == UART_MODE_IRQ) {

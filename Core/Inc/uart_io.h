@@ -24,7 +24,7 @@ int8_t switch_to_irq_driver(void);
 int8_t switch_to_polling_driver(void);
 
 // Generic non-blocking read function
-HAL_StatusTypeDef read_char_nonblocking(char* io_char);
+HAL_StatusTypeDef read_char(char* io_char);
 
 // Generic process function for active driver
 void process_active_uart_driver(void);
