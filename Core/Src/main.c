@@ -168,20 +168,20 @@ int main(void)
             sprintf(write_buffer, "\nIncorrect input! Please try again\n");
             HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
     	} else if (parser_res == PRSR_CREATE_SCHEME) {
-            scheme_len_array[5+(inp_scheme%4)] = strlen(parser_buffer);
+            scheme_len_array[4+(inp_scheme%4)] = strlen(parser_buffer);
     		for (int i = 0; i < strlen(parser_buffer); i++){
               switch (parser_buffer[i]){
                 case 'y':
-                  state_list[5+(inp_scheme%4)][i] = STATE_Y;
+                  state_list[4+(inp_scheme%4)][i] = STATE_Y;
                   break;
                 case 'r':
-                  state_list[5+(inp_scheme%4)][i] = STATE_R;
+                  state_list[4+(inp_scheme%4)][i] = STATE_R;
                   break;
                 case 'g':
-                  state_list[5+(inp_scheme%4)][i] = STATE_G;
+                  state_list[4+(inp_scheme%4)][i] = STATE_G;
                   break;
                 case 'n':
-                  state_list[5+(inp_scheme%4)][i] = STATE_N;
+                  state_list[4+(inp_scheme%4)][i] = STATE_N;
                   break;
               }
             }
@@ -193,16 +193,16 @@ int main(void)
     	else if (parser_res == PRSR_PERIOD){
          switch (parser_buffer[0] - '0'){
            case 1:
-             step_period_array[5+(inp_scheme%4)] = 200;
+             step_period_array[4+(inp_scheme%4)] = 200;
              break;
            case 2:
-             step_period_array[5+(inp_scheme%4)] = 500;
+             step_period_array[4+(inp_scheme%4)] = 500;
              break;
            case 3:
-             step_period_array[5+(inp_scheme%4)] = 1000;
+             step_period_array[4+(inp_scheme%4)] = 1000;
              break;
          }
-          sprintf(write_buffer, "\nNew scheme number: %d\n", (5+(inp_scheme%4)));
+          sprintf(write_buffer, "\nNew scheme number: %d\n", (4+(inp_scheme%4)));
           HAL_UART_Transmit( &huart6, (uint8_t *) write_buffer, strlen( write_buffer ), 100 );
           inp_scheme += 1;
           clear_buffer();

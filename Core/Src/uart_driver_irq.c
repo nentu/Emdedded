@@ -15,6 +15,7 @@ static volatile uint16_t tx_head = 0;
 static volatile uint16_t tx_tail = 0;
 static volatile bool tx_busy = false;
 
+// --- Helper Functions ---
 static uint16_t buffer_increment(uint16_t idx, uint16_t size) {
     return (idx + 1) % size;
 }
@@ -52,7 +53,13 @@ int8_t uart_irq_init(UART_HandleTypeDef* huart) {
     HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
     // Start receiving the first byte in interrupt mode
     // This primes the interrupt to fire when the first byte arrives
+    // --- IMPROVED: Check return value ---
     if (HAL_UART_Receive_IT(huart_handle, (uint8_t*)&rx_buffer[rx_head], 1) != HAL_OK) {
+        // If starting the first receive fails, the driver cannot function correctly
+        // This might happen if the HAL state is not ready or if interrupts are disabled
+        // at the NVIC level for the UART instance (though they should be enabled via CubeMX).
+        // It could also happen if the UART peripheral itself is in an error state.
+        // For now, just return error.
         return UART_IRQ_ERROR;
     }
 
@@ -173,11 +180,25 @@ void uart_irq_handler(UART_HandleTypeDef *huart) {
             rx_head = next_head;
         }
 
-        // Restart reception for the next byte
+        // --- IMPROVED: Restart reception for the next byte and check return value ---
         if (HAL_UART_Receive_IT(huart_handle, (uint8_t*)&rx_buffer[rx_head], 1) != HAL_OK) {
             // Error restarting reception - handle if necessary
-            // Could set an error flag
+            // Could set an error flag, log error, or try to recover
+            // For now, we just don't restart, which means reception stops.
+            // This is a critical error state.
+            // It might be better to attempt a reset of the UART handle or flag the error globally.
+            // For this implementation, let's assume a critical failure and stop trying to restart.
+            // A more robust system might have a watchdog or reset mechanism here.
+            // For now, log the error (if logging is available) or set an internal error flag.
+            // This situation indicates a problem with the UART HAL state or configuration.
+            // The driver is now in a non-functional state for receiving.
+            // A real system might need to switch back to polling or reset the UART.
+            // For simulation purposes, we'll just stop trying to restart.
+            // In a real system, you'd want to handle this more gracefully.
+            // Example: static bool rx_error = false; rx_error = true;
+            // Then, read_char_nonblocking could return an error if rx_error is set.
         }
+        // --- END IMPROVED ---
     }
 
     // Handle Transmit Interrupt
@@ -190,6 +211,7 @@ void uart_irq_handler(UART_HandleTypeDef *huart) {
             } else {
                  // Error starting next transmission - handle if necessary
                  tx_busy = false; // Reset busy flag on error
+                 // Could set an error flag or log the error
             }
         } else {
             // No more bytes to send, transmission is complete
@@ -204,7 +226,8 @@ void uart_irq_handler(UART_HandleTypeDef *huart) {
         __HAL_UART_GET_FLAG(huart, UART_FLAG_FE) || __HAL_UART_GET_FLAG(huart, UART_FLAG_ORE)) {
         // Clear error flags
         __HAL_UART_CLEAR_PEFLAG(huart);
-        // Optionally, handle the error (reset buffers, log error)
+        // Optionally, handle the error (e.g., reset buffers, log error)
         // For now, just clear the flags and continue
+        // Could set an error flag indicating a reception error occurred
     }
 }

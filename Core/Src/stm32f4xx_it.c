@@ -20,10 +20,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_it.h"
-#include "uart_io.h"
-
-/* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#include "uart_io.h" // Include for mode checking and extern current_uart_mode
+#include "uart_driver_irq.h" // Include for the IRQ driver handler
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -209,11 +208,7 @@ void USART6_IRQHandler(void)
 	char write_buffer[100];
 	sprintf(write_buffer, "Got USART6_IRQHandler\n");
 	HAL_UART_Transmit(&huart6, (uint8_t *) write_buffer, strlen(write_buffer), 100);
-
-  /* USER CODE END USART6_IRQn 0 */
-  HAL_UART_IRQHandler(&huart6);
-  /* USER CODE BEGIN USART6_IRQn 1 */
-  // --- NEW: Check current mode and call appropriate handler ---
+    // --- NEW: Check current mode and call appropriate handler ---
     // This replaces the generic HAL_UART_IRQHandler call when using the custom IRQ driver
     if (current_uart_mode == UART_MODE_IRQ) {
         uart_irq_handler(&huart6);
@@ -223,12 +218,12 @@ void USART6_IRQHandler(void)
         // just in case it's needed for error clearing or other standard processing.
         // However, if polling is truly active and no IT functions are called,
         // this might not be strictly necessary. Let's include it for safety.
-        // If the standard HAL handler interferes with polling, it can be removed,
-        // but ensure errors are handled correctly.
-        // For this implementation, we'll call the standard handler if not in IRQ mode.
         // The standard handler will likely find no active IT operations and return.
         HAL_UART_IRQHandler(&huart6);
     }
+  /* USER CODE END USART6_IRQn 0 */
+  // HAL_UART_IRQHandler(&huart6); // --- REMOVED: Replaced by mode-specific handling above ---
+  /* USER CODE BEGIN USART6_IRQn 1 */
 
   /* USER CODE END USART6_IRQn 1 */
 }
