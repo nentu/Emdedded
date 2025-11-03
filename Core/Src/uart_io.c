@@ -27,24 +27,8 @@ int8_t switch_to_irq_driver(void) {
     if (current_uart_mode == UART_MODE_IRQ) {
         return 0; // Already in IRQ mode
     }
-    // Deinitialize polling mode resources if any (HAL handles hardware state)
-    // Abort any ongoing IT transfers that might have been started by polling driver accidentally
-    // This is crucial before initializing the IRQ driver
     HAL_UART_Abort_IT(&huart6);
 
-    // Wait for the driver to become READY. This is crucial.
-//    uint32_t start_tick = HAL_GetTick();
-//    while (huart6.gState != HAL_UART_STATE_READY) {
-//        // Add a timeout to prevent infinite loop in case of hardware error
-//        if ((HAL_GetTick() - start_tick) > 100) { // 100 ms timeout
-//            // If it doesn't become ready, something is wrong.
-//            // For now, we'll force the state to READY as a last resort.
-//            // This is a bit of a hack but can recover from a stuck state.
-//            // A more robust system would handle this error properly.
-//            huart6.gState = HAL_UART_STATE_READY;
-//            break;
-//        }
-//    }
     // Initialize IRQ mode
     if (uart_irq_init(&huart6) == UART_IRQ_OK) {
         current_uart_mode = UART_MODE_IRQ;

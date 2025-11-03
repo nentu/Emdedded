@@ -15,7 +15,7 @@ static volatile uint16_t tx_head = 0;
 static volatile uint16_t tx_tail = 0;
 static volatile bool tx_busy = false;
 
-int uart6_sending_ongoing;
+static volatile int uart6_sending_ongoing;
 
 char write_buffer[200];
 
@@ -51,6 +51,7 @@ int8_t uart_irq_init(UART_HandleTypeDef* huart) {
     tx_tail = 0;
     rx_overflow = false;
     tx_busy = false;
+    uart6_sending_ongoing = 0;
 
     if (HAL_UART_Receive_IT(huart_handle, (uint8_t*)&rx_buffer[rx_head], 1) != HAL_OK) {
         return UART_IRQ_ERROR;
