@@ -84,12 +84,12 @@ static inline bool uart_ready_for_transmit() {
 
 
 
-int8_t uart_irq_send_string(const char* str) {
+void uart_irq_send_string(const char* str, uint16_t str_len) {
     while (!uart_ready_for_transmit()){
 //    	write_string("Not ready\n");
     }
     uart6_sending_ongoing = 1;
-	HAL_UART_Transmit_IT(&huart6, (void *) str, strlen(str));
+	HAL_UART_Transmit_IT(&huart6, str, str_len);
 	return 1;
 }
 

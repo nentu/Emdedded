@@ -43,7 +43,7 @@ int8_t uart_irq_send_char(char c);
  * @param str String to send
  * @return UART_IRQ_OK on success, error code on failure
  */
-int8_t uart_irq_send_string(const char* str);
+void uart_irq_send_string(const char* str, uint16_t size);
 
 /**
  * @brief Receive a single character from the RX buffer

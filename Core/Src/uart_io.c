@@ -100,7 +100,7 @@ HAL_StatusTypeDef write_string_len(const char* string, size_t str_len) {
     } else { // UART_MODE_IRQ
         // Use the IRQ driver's buffer check
 
-        int8_t res = uart_irq_send_string(string);
+        uart_irq_send_string(string, str_len);
     }
 }
 
