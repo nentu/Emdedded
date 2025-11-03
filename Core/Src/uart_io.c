@@ -57,10 +57,8 @@ int8_t switch_to_polling_driver(void) {
     if (current_uart_mode == UART_MODE_POLLING) {
         return 0; // Already in Polling mode
     }
-    // Deinitialize IRQ mode resources (stop ongoing transfers, clear buffers)
-    // Let the IRQ driver handle clearing its own buffers via its process function if needed
-    // Abort any ongoing IT transfers started by the IRQ driver
-    HAL_UART_Abort_IT(&huart6); // Stop ongoing IT transfers
+
+   HAL_UART_Abort_IT(&huart6); // Stop ongoing IT transfers
     // Reinitialize hardware for polling (it's already initialized)
     current_uart_mode = UART_MODE_POLLING;
     return 0; // Success

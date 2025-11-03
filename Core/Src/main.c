@@ -148,17 +148,7 @@ int main(void)
       write_string(write_buffer);
     }
     HAL_StatusTypeDef read_res = read_char(input_symbol);
-    if (read_res == HAL_ERROR){
-      sprintf(write_buffer, "HAL_ERROR\n");
-      
-      write_string(write_buffer);
-    }
-    else if (read_res == HAL_BUSY){
-      sprintf(write_buffer, "HAL_BUSY\n");
-      
-      write_string(write_buffer);
-    }
-    else if (read_res == HAL_OK){
+    if (read_res != HAL_OK) continue;
     	
         write_string_len(input_symbol, 1);
     	enum ParserRes parser_res = parser_step(input_symbol[0]);
@@ -229,20 +219,17 @@ int main(void)
                 // Assume we have a function to switch drivers
                 if (switch_to_irq_driver() == 0) { // Success
                     sprintf(write_buffer, "Switched to IRQ mode\n");
-                    
-          write_string(write_buffer);
+                    write_string(write_buffer);
                 } else { // Failure
                     sprintf(write_buffer, "\nFailed to switch to IRQ mode\n");
-                    
-          write_string(write_buffer);
+                    write_string(write_buffer);
                 }
             } else if (strstr(parser_buffer, "off") != NULL) {
                 // Switch to Polling driver
                 // Assume we have a function to switch drivers
                 if (switch_to_polling_driver() == 0) { // Success
                     sprintf(write_buffer, "\nSwitched to Polling mode\n");
-                    
-          write_string(write_buffer);
+                    write_string(write_buffer);
                 } else { // Failure
                     sprintf(write_buffer, "\nFailed to switch to Polling mode\n");
                     
@@ -256,7 +243,7 @@ int main(void)
         }
 
 //        sprintf(write_buffer, "%s", input_symbol);
-    }
+    
 //    process_active_uart_driver(); // Placeholder name
 
 
