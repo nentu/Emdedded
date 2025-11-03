@@ -99,18 +99,8 @@ HAL_StatusTypeDef write_string_len(const char* string, size_t str_len) {
 
     } else { // UART_MODE_IRQ
         // Use the IRQ driver's buffer check
-        int8_t res = uart_irq_send_string(string);
-        if (res == UART_IRQ_OK) {
-            HAL_UART_Transmit( &huart6, "HAL_OK", strlen("HAL_OK"), 200);
-            return HAL_OK; // Map success
-        } else if (res == UART_IRQ_BUFFER_EMPTY) {
-            return HAL_TIMEOUT; // Map empty buffer to timeout for consistency
-            HAL_UART_Transmit( &huart6, "HAL_TIMEOUT", strlen("HAL_TIMEOUT"), 200);
 
-        } else {
-            return HAL_ERROR; // Map other errors
-            HAL_UART_Transmit( &huart6, "HAL_ERROR", strlen("HAL_ERROR"), 200);
-        }
+        int8_t res = uart_irq_send_string(string);
     }
 }
 

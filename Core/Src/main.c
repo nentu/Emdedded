@@ -147,7 +147,6 @@ int main(void)
     	
       write_string(write_buffer);
     }
-    if (HAL_GetTick() - tick_count < 100) continue;
     HAL_StatusTypeDef read_res = read_char(input_symbol);
     if (read_res == HAL_ERROR){
       sprintf(write_buffer, "HAL_ERROR\n");
