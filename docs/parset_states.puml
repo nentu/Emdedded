@@ -1,0 +1,56 @@
+@startuml
+[*] --> START
+
+START --> CRT_N : n
+START --> CHNG_S : s
+START --> [*] : other
+
+CRT_N --> CRT_E : e
+CRT_N --> [*] : other
+
+CRT_E --> CRT_W : w
+CRT_E --> [*] : other
+
+CRT_W --> CRT__ : ' ' (space)
+CRT_W --> [*] : other
+
+CRT__ --> CRT_DIGIT : is_color()\nappend_char()
+CRT__ --> [*] : other
+
+CRT_DIGIT --> CRT_EXEC : \\n\ndigit_count=0\n**return PRSR_CREATE_SCHEME**
+CRT_DIGIT --> CRT_DIGIT : is_color()\nappend_char()\ndigit_count++
+CRT_DIGIT --> [*] : other
+
+CRT_EXEC --> START : [1-3]\nappend_char()\n**return PRSR_PERIOD**
+CRT_EXEC --> [*] : other
+
+CHNG_S --> CHNG_E : e
+CHNG_S --> [*] : other
+
+CHNG_E --> CHNG_T : t
+CHNG_E --> [*] : other
+
+CHNG_T --> CHNG__ : ' ' (space)
+CHNG_T --> [*] : other
+
+CHNG__ --> START : [0-7]\nappend_char()\n**return PRSR_CHANGE_SCHEME**
+CHNG__ --> LINE : [a-z]\nappend_char()
+CHNG__ --> [*] : other
+
+LINE --> START : \\n\n**return PRSR_INTER**
+LINE --> LINE : [a-z] or ' '\nappend_char()
+LINE --> [*] : other
+
+note right of CRT_DIGIT
+  When digit_count == 7:
+  - digit_count = 0
+  - goto CRT_EXEC
+  - return PRSR_CREATE_SCHEME
+end note
+
+note right of CRT_EXEC
+  Debug output sent via UART:
+  "Start CTR_EXEC\\n"
+end note
+
+@enduml
