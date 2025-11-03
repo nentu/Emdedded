@@ -145,19 +145,19 @@ int main(void)
 
       sprintf(write_buffer, "\nColor scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
     	
-          write_string(write_buffer);
+      write_string(write_buffer);
     }
-
+    if (HAL_GetTick() - tick_count < 100) continue;
     HAL_StatusTypeDef read_res = read_char(input_symbol);
     if (read_res == HAL_ERROR){
       sprintf(write_buffer, "HAL_ERROR\n");
       
-          write_string(write_buffer);
+      write_string(write_buffer);
     }
     else if (read_res == HAL_BUSY){
       sprintf(write_buffer, "HAL_BUSY\n");
       
-          write_string(write_buffer);
+      write_string(write_buffer);
     }
     else if (read_res == HAL_OK){
     	
@@ -258,7 +258,7 @@ int main(void)
 
 //        sprintf(write_buffer, "%s", input_symbol);
     }
-    process_active_uart_driver(); // Placeholder name
+//    process_active_uart_driver(); // Placeholder name
 
 
   }

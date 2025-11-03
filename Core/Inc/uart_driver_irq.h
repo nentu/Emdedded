@@ -71,6 +71,7 @@ void uart_irq_process(void);
  */
 void uart_irq_handler(UART_HandleTypeDef *huart);
 
+int8_t uart_irq_start_transmission(void);
 #ifdef __cplusplus
 }
 #endif
