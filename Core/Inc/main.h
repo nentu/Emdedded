@@ -38,6 +38,7 @@ extern "C" {
 #include "uart_io.h"
 #include "parser.h"
 #include "light_controller.h"
+#include "color_controller.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/

@@ -111,19 +111,9 @@ int main(void)
     /* USER CODE BEGIN 3 */
 //	  continue;
     if (HAL_GetTick() - tick_count >= 100) {
-		tick_count = HAL_GetTick();
-    	set_light_power(GREEN, phase % 100);
-//    	set_light_power(YELLOW, (phase + 33) % 100);
-//    	set_light_power(RED, (phase + 50) % 100);
-		phase = (phase + 5) % 100;
-//
-        sprintf(write_buffer, "\htim4.Instance->CCR2: %d\n", htim4.Instance->CCR2);
-        write_string(write_buffer);
-        sprintf(write_buffer, "\htim4.Instance->CCR3: %d\n", htim4.Instance->CCR3);
-        write_string(write_buffer);
-        sprintf(write_buffer, "\htim4.Instance->CCR4: %d\n\n", htim4.Instance->CCR4);
-        write_string(write_buffer);
-    }
+		  tick_count = HAL_GetTick();
+      HAL_StatusTypeDef read_res = read_char(input_symbol);
+      change_color(input_symbol);
 
   }
   /* USER CODE END 3 */
