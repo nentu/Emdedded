@@ -6,7 +6,8 @@ enum BtnColor cur_color;
 int cur_power;
 int cur_color_state;
 
-color_model = {
+
+ColorMode color_model[10] = {
         {RED, 69},
 		{GREEN, 10},
         {GREEN, 40},

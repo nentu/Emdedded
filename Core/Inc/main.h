@@ -36,7 +36,6 @@ extern "C" {
 #include "btn_driver.h"
 #include "my_gpio.h"
 #include "uart_io.h"
-#include "parser.h"
 #include "light_controller.h"
 #include "color_controller.h"
 /* USER CODE END Includes */
