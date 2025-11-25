@@ -46,7 +46,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-#define STEP_PERIOD 200
+#define STEP_PERIOD 1000
 #define STATE_N 0
 #define STATE_G 1
 #define STATE_Y 2

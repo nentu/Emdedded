@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
@@ -86,6 +87,7 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
   MX_USART6_UART_Init();
+  MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
 
   void switch_color(uint8_t color_id){
@@ -122,6 +124,9 @@ int main(void)
 	  scheme_len_array[i] = 10;
   }
 
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
+  int phase = 0;
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -131,22 +136,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-    if (HAL_GetTick() - tick_count >= step_period_array[color_scheme]) {
-
-		switch_color(state_list[color_scheme][state_id]);
-		state_id = (state_id + 1) % scheme_len_array[color_scheme];
+    if (HAL_GetTick() - tick_count >= 100) {
+    	htim4.Instance->CCR2 = (phase+ % 1000);
 		tick_count = HAL_GetTick();
-
+		phase += 10;
+        sprintf(write_buffer, "\htim4.Instance->CCR2: %d\n", htim4.Instance->CCR2);
+        write_string(write_buffer);
     }
+    continue;
 
-    if (getBtnState() == BTN_CLICKED){
-    	color_scheme = (color_scheme + 1) % scheme_count;
-    	state_id = 0;
 
-      sprintf(write_buffer, "\nColor scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
-    	
-      write_string(write_buffer);
-    }
     HAL_StatusTypeDef read_res = read_char(input_symbol);
     if (read_res != HAL_OK) continue;
     	
