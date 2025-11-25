@@ -7,7 +7,16 @@ int cur_power;
 int cur_color_state;
 
 color_model = {
-		{}
+        {RED, 69},
+		{GREEN, 10},
+        {GREEN, 40},
+        {GREEN, 100},
+        {YELLOW, 10},
+        {YELLOW, 40},
+        {YELLOW, 100},
+        {RED, 10},
+        {RED, 40},
+        {RED, 100},
 };
 
 void change_color(char input_symbol) {
