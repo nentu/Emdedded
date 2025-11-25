@@ -81,7 +81,7 @@ int main(void)
   SystemClock_Config();
 
   /* USER CODE BEGIN SysInit */
-  my_GPIO_Init();
+//  my_GPIO_Init();
   /* USER CODE END SysInit */
 
   /* Initialize all configured peripherals */
@@ -105,11 +105,18 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+//	  continue;
     if (HAL_GetTick() - tick_count >= 100) {
-    	set_light_power(GREEN, phase);
 		tick_count = HAL_GetTick();
-		phase = (phase + 10) % 100;
+////    	set_light_power(GREEN, phase % 100);
+//    	set_light_power(YELLOW, (phase + 66) % 100);
+//		phase = (phase + 5) % 100;
+//
         sprintf(write_buffer, "\htim4.Instance->CCR2: %d\n", htim4.Instance->CCR2);
+        write_string(write_buffer);
+        sprintf(write_buffer, "\htim4.Instance->CCR3: %d\n", htim4.Instance->CCR3);
+        write_string(write_buffer);
+        sprintf(write_buffer, "\htim4.Instance->CCR4: %d\n\n", htim4.Instance->CCR4);
         write_string(write_buffer);
     }
 

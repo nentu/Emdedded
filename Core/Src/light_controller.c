@@ -15,5 +15,11 @@ int set_light_power(enum BtnColor btn, int power){
 	if (btn == GREEN){
     	htim4.Instance->CCR2 = (power * 10);
 	}
+	if (btn == YELLOW){
+    	htim4.Instance->CCR3 = (power * 10);
+	}
+	if (btn == RED){
+    	htim4.Instance->CCR4 = (power * 10);
+	}
 	return 0;
 }

@@ -74,6 +74,16 @@ void MX_TIM4_Init(void)
   {
     Error_Handler();
   }
+  sConfigOC.Pulse = 0;
+  if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_3) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  sConfigOC.Pulse = 500;
+  if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_4) != HAL_OK)
+  {
+    Error_Handler();
+  }
   /* USER CODE BEGIN TIM4_Init 2 */
 
   /* USER CODE END TIM4_Init 2 */
@@ -109,8 +119,10 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef* timHandle)
     __HAL_RCC_GPIOD_CLK_ENABLE();
     /**TIM4 GPIO Configuration
     PD13     ------> TIM4_CH2
+    PD14     ------> TIM4_CH3
+    PD15     ------> TIM4_CH4
     */
-    GPIO_InitStruct.Pin = GPIO_PIN_13;
+    GPIO_InitStruct.Pin = GPIO_PIN_13|GPIO_PIN_14|GPIO_PIN_15;
     GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
