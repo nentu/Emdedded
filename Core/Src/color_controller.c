@@ -1,6 +1,18 @@
 #include "color_controller.h"
 #include "light_controller.h"
 
+
+ #define max(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a > _b ? _a : _b; })
+
+ #define min(a,b) \
+   ({ __typeof__ (a) _a = (a); \
+       __typeof__ (b) _b = (b); \
+     _a < _b ? _a : _b; })
+
+
 enum ColorState cur_state = WORK;
 enum BtnColor cur_color;
 int cur_power;
@@ -39,7 +51,7 @@ void change_color(char input_symbol) {
         }
         else if (input_symbol > '0' && input_symbol <= '9'){
             set_light_power(color_model[(input_symbol - '0')].color, color_model[(input_symbol-'0')].power);
-            sprintf(write_buffer, "\n %d Color %d power\n", color_model[(input_symbol - '0')].color, color_model[(input_symbol-'0')].power);
+            sprintf(write_buffer, "\n %s Color %d power\n", ColorStrings[color_model[(input_symbol - '0')].color], color_model[(input_symbol-'0')].power);
             write_string(write_buffer);
         }
     }
