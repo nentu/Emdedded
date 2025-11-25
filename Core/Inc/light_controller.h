@@ -19,7 +19,7 @@ typedef struct {
     enum BtnColor color;
     int power;
 } ColorMode;
-extern ColorMode mode_list[10];
+extern ColorMode color_model[10];
 
 
 int set_light_power(enum BtnColor btn, int power);
