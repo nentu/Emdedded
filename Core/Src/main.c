@@ -92,6 +92,8 @@ int main(void)
 
 
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_3);
+  HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_4);
   int phase = 0;
   uint32_t tick_count = 0;
   char write_buffer[200];
@@ -100,6 +102,10 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  set_light_power(GREEN, 0);
+  set_light_power(YELLOW, 0);
+  set_light_power(RED, 0);
+//    	set_light_power(RED, (phase + 50) % 100);
   while (1)
   {
     /* USER CODE END WHILE */
@@ -108,9 +114,10 @@ int main(void)
 //	  continue;
     if (HAL_GetTick() - tick_count >= 100) {
 		tick_count = HAL_GetTick();
-////    	set_light_power(GREEN, phase % 100);
-//    	set_light_power(YELLOW, (phase + 66) % 100);
-//		phase = (phase + 5) % 100;
+    	set_light_power(YELLOW, phase % 100);
+//    	set_light_power(YELLOW, (phase + 33) % 100);
+//    	set_light_power(RED, (phase + 50) % 100);
+		phase = (phase + 5) % 100;
 //
         sprintf(write_buffer, "\htim4.Instance->CCR2: %d\n", htim4.Instance->CCR2);
         write_string(write_buffer);

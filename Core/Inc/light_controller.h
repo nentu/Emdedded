@@ -13,7 +13,7 @@
 enum BtnColor{
 	GREEN, YELLOW, RED
 };
-
+#define MAX_POWER 100
 int set_light_power(enum BtnColor btn, int power);
 
 #endif /* INC_LIGHT_CONTROLLER_H_ */
