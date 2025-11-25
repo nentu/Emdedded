@@ -155,7 +155,7 @@ int main(void)
 
     	if (parser_res == PRSR_OK){
 
-//            
+        
     		continue;
     	} else if (parser_res == UNKNOWN){
             sprintf(write_buffer, "\nIncorrect input! Please try again\n");
@@ -241,12 +241,6 @@ int main(void)
                  
             }
         }
-
-//        sprintf(write_buffer, "%s", input_symbol);
-    
-//    process_active_uart_driver(); // Placeholder name
-
-
   }
   /* USER CODE END 3 */
 }

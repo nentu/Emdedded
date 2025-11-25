@@ -27,7 +27,7 @@ int8_t switch_to_irq_driver(void) {
     if (current_uart_mode == UART_MODE_IRQ) {
         return 0; // Already in IRQ mode
     }
-    HAL_UART_Abort_IT(&huart6);
+    // HAL_UART_Abort_IT(&huart6);
 
     // Initialize IRQ mode
     if (uart_irq_init(&huart6) == UART_IRQ_OK) {
@@ -42,7 +42,7 @@ int8_t switch_to_polling_driver(void) {
         return 0; // Already in Polling mode
     }
 
-   HAL_UART_Abort_IT(&huart6); // Stop ongoing IT transfers
+   HAL_UART_Abort(&huart6); // Stop ongoing IT transfers
     // Reinitialize hardware for polling (it's already initialized)
     current_uart_mode = UART_MODE_POLLING;
     return 0; // Success
