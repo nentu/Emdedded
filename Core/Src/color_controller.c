@@ -77,11 +77,15 @@ void change_color(char input_symbol) {
         } 
         else if (input_symbol == 'c'){
             cur_color = RED;
+        } else{
+            sprintf(write_buffer, "\n Wrong symbol\n Choose color: a - Green, b -Yellow, c - Red\n", cur_color_state);
+            write_string(write_buffer);
+            return;
         }
         color_model[cur_color_state].color = cur_color;
         cur_state = POWER;
 
-        sprintf(write_buffer, "\n %s color choosed\n Enter + for more light, And - for less light\n", ColorStrings[cur_color]);
+        sprintf(write_buffer, "\n %s color choosed\n Enter + for more light, And - for less light\nCur power: %d\n", ColorStrings[cur_color], color_model[cur_color_state].power);
         write_string(write_buffer);
     }
     else if (cur_state == POWER) {
