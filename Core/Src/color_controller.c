@@ -6,7 +6,11 @@ enum BtnColor cur_color;
 int cur_power;
 int cur_color_state;
 
-void change_color(input_symbol) {
+color_model = {
+		{}
+};
+
+void change_color(char input_symbol) {
     if(cur_state == WORK){
         if ( input_symbol == '0'){
             clear_lights();

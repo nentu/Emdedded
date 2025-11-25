@@ -8,6 +8,6 @@ enum ColorState {
   POWER
 };
 
-enum ColorState change_color(char input_symbol);
+void change_color(char input_symbol);
 
 #endif

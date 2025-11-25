@@ -97,6 +97,7 @@ int main(void)
   int phase = 0;
   uint32_t tick_count = 0;
   char write_buffer[200];
+  char input_symbol;
 
   /* USER CODE END 2 */
 
@@ -118,7 +119,7 @@ int main(void)
   }
   /* USER CODE END 3 */
 }
-
+}
 /**
   * @brief System Clock Configuration
   * @retval None
