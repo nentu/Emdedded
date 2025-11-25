@@ -19,7 +19,12 @@ ColorMode color_model[10] = {
         {RED, 40},
         {RED, 100},
 };
-
+char write_buffer[200];
+const char *ColorStrings[] = {
+    "GREEN",
+    "YELLOW",
+    "RED",
+};
 void change_color(char input_symbol) {
     if(cur_state == WORK){
         if ( input_symbol == '0'){
@@ -27,7 +32,7 @@ void change_color(char input_symbol) {
             sprintf(write_buffer, "\nNo lights\n");
             write_string(write_buffer);
         }
-        else if (input_symbol == '\n'){
+        else if (input_symbol == '\r'){
             cur_state = SETUP;
             sprintf(write_buffer, "\nSwitch to setup mode\n");
             write_string(write_buffer);
@@ -56,11 +61,12 @@ void change_color(char input_symbol) {
         }
         color_model[cur_color_state].color = cur_color;
         cur_state = POWER;
-        sprintf(write_buffer, "\n %d color choosed\n", cur_color);
+
+        sprintf(write_buffer, "\n %s color choosed\n", ColorStrings[cur_color]);
         write_string(write_buffer);
     }
     else if (cur_state == POWER) {
-        if (input_symbol == '\n'){
+        if (input_symbol == '\r'){
             cur_state = WORK;
         }
         else if( input_symbol == '+'){

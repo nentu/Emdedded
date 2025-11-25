@@ -49,24 +49,11 @@ int8_t switch_to_polling_driver(void) {
 }
 
 HAL_StatusTypeDef read_char(char* io_char) {
-
     if (!io_char) return HAL_ERROR;
 
-    if (current_uart_mode == UART_MODE_POLLING) {
-        // Use the original polling method, but make it truly non-blocking
-        // HAL_UART_Receive with 0 timeout returns immediately if no data
-        return HAL_UART_Receive(&huart6, (uint8_t *) io_char, 1, 0);
-    } else { // UART_MODE_IRQ
-        // Use the IRQ driver's buffer check
-        int8_t res = uart_irq_receive_char(io_char);
-        if (res == UART_IRQ_OK) {
-            return HAL_OK; // Map success
-        } else if (res == UART_IRQ_BUFFER_EMPTY) {
-            return HAL_TIMEOUT; // Map empty buffer to timeout for consistency
-        } else {
-            return HAL_ERROR; // Map other errors
-        }
-    }
+
+	return HAL_UART_Receive(&huart6, (uint8_t *) io_char, 1, 0);
+
 }
 
 

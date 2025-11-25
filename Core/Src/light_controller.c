@@ -10,6 +10,7 @@
 #include "tim.h"
 
 int set_light_power(enum BtnColor btn, int power){
+	if (power == MAX_POWER) power --;
 	if ((power < 0) || (power >= MAX_POWER))
 		return 1;
 	uint32_t green_pow = 0, yellow_pow = 0, red_pow = 0;

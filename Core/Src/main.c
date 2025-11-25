@@ -110,13 +110,13 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-//	  continue;
-    if (HAL_GetTick() - tick_count >= 100) {
-	  tick_count = HAL_GetTick();
-      HAL_StatusTypeDef read_res = read_char(input_symbol);
+      HAL_StatusTypeDef read_res = read_char(&input_symbol);
+      if (read_res != HAL_OK)
+    	  continue;
+      sprintf(write_buffer, "%c", input_symbol);
+      write_string(write_buffer);
       change_color(input_symbol);
 
-  }
   /* USER CODE END 3 */
 }
 }

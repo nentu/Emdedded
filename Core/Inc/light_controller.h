@@ -15,6 +15,7 @@ enum BtnColor{
 	GREEN=0, YELLOW=1, RED=2
 };
 
+
 typedef struct {
     enum BtnColor color;
     int power;
