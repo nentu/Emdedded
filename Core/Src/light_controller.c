@@ -7,6 +7,7 @@
 
 
 #include "light_controller.h"
+#include "tim.h"
 
 int set_light_power(enum BtnColor btn, int power){
 	if ((power < 0) || (power >= MAX_POWER))
