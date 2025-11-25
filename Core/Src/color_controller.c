@@ -44,10 +44,17 @@ void change_color(char input_symbol) {
         }
     }
     else if (cur_state == SETUP){
-        cur_color_state = input_symbol-'0';
-        cur_state = COLOR;
-        sprintf(write_buffer, "\n %d state choosed\n", cur_color_state);
-        write_string(write_buffer);
+        if (input_symbol > '0' && input_symbol <= '9'){
+            cur_color_state = input_symbol-'0';
+            cur_state = COLOR;
+            sprintf(write_buffer, "\n %d state choosed\n", cur_color_state);
+            write_string(write_buffer);
+        }
+        else {
+            sprintf(write_buffer, "\n Wrong number. Try again! \n", cur_color_state);
+            write_string(write_buffer);            
+        }
+
     }
     else if (cur_state == COLOR) {
         if (input_symbol  == 'a'){
@@ -68,15 +75,17 @@ void change_color(char input_symbol) {
     else if (cur_state == POWER) {
         if (input_symbol == '\r'){
             cur_state = WORK;
+            sprintf(write_buffer, "\nSwitch to work mode\n");
+            write_string(write_buffer);
         }
         else if( input_symbol == '+'){
-            color_model[cur_color_state].power += 10;
-            sprintf(write_buffer, "\n Power + 10\n");
+            color_model[cur_color_state].power = min(color_model[cur_color_state].power + 10, 100);
+            sprintf(write_buffer, "\n %d power\n", color_model[cur_color_state].power);
             write_string(write_buffer);
         }
         else if( input_symbol == '-'){
-            color_model[cur_color_state].power -= 10;
-            sprintf(write_buffer, "\n Power - 10\n");
+            color_model[cur_color_state].power = max(color_model[cur_color_state].power - 10, 0);
+            sprintf(write_buffer, "\n %d power\n", color_model[cur_color_state].power);
             write_string(write_buffer);
         }
     }
