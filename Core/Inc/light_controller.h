@@ -11,9 +11,10 @@
 #include "tim.h"
 
 enum BtnColor{
-	GREEN, YELLOW, RED
+	GREEN=0, YELLOW=1, RED=2
 };
 #define MAX_POWER 100
 int set_light_power(enum BtnColor btn, int power);
+void clear_lights();
 
 #endif /* INC_LIGHT_CONTROLLER_H_ */

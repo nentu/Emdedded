@@ -102,9 +102,7 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  set_light_power(GREEN, 0);
-  set_light_power(YELLOW, 0);
-  set_light_power(RED, 0);
+  clear_lights();
 //    	set_light_power(RED, (phase + 50) % 100);
   while (1)
   {
@@ -114,7 +112,7 @@ int main(void)
 //	  continue;
     if (HAL_GetTick() - tick_count >= 100) {
 		tick_count = HAL_GetTick();
-    	set_light_power(YELLOW, phase % 100);
+    	set_light_power(GREEN, phase % 100);
 //    	set_light_power(YELLOW, (phase + 33) % 100);
 //    	set_light_power(RED, (phase + 50) % 100);
 		phase = (phase + 5) % 100;
