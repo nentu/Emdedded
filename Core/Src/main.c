@@ -90,42 +90,11 @@ int main(void)
   MX_TIM4_Init();
   /* USER CODE BEGIN 2 */
 
-  void switch_color(uint8_t color_id){
-      if (color_id == STATE_N)
-        no_light();
-      else if (color_id == STATE_G)
-        green_light();
-      else if (color_id == STATE_Y)
-        yellow_light();
-      else if (color_id == STATE_R)
-        red_light();
-        else if (color_id == STATE_RG)
-            red_green_light();
-        else if (color_id == STATE_YG)
-            yellow_green_light();
-  }
-
-  uint32_t state_id = 0;
-  uint32_t color_scheme = 0;
-  uint32_t tick_count = 0;
-  uint32_t inp_scheme = 0;
-
-  char input_symbol[1];
-  char write_buffer[200];
-
-  uint32_t scheme_count = 4;
-  uint32_t step_period_array[8];
-  for (int i = 0; i < 8; i++){
-	  step_period_array[i] = STEP_PERIOD;
-  }
-
-  uint32_t scheme_len_array[8];
-  for (int i = 0; i < 8; i++){
-	  scheme_len_array[i] = 10;
-  }
 
   HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_2);
   int phase = 0;
+  uint32_t tick_count = 0;
+  char write_buffer[200];
 
   /* USER CODE END 2 */
 
@@ -137,109 +106,13 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
     if (HAL_GetTick() - tick_count >= 100) {
-    	htim4.Instance->CCR2 = (phase+ % 1000);
+    	set_light_power(GREEN, phase);
 		tick_count = HAL_GetTick();
-		phase += 10;
+		phase = (phase + 10) % 100;
         sprintf(write_buffer, "\htim4.Instance->CCR2: %d\n", htim4.Instance->CCR2);
         write_string(write_buffer);
     }
-    continue;
 
-
-    HAL_StatusTypeDef read_res = read_char(input_symbol);
-    if (read_res != HAL_OK) continue;
-    	
-        write_string_len(input_symbol, 1);
-    	enum ParserRes parser_res = parser_step(input_symbol[0]);
-
-    	if (parser_res == PRSR_OK){
-
-        
-    		continue;
-    	} else if (parser_res == UNKNOWN){
-            sprintf(write_buffer, "\nIncorrect input! Please try again\n");
-            
-          write_string(write_buffer);
-    	} else if (parser_res == PRSR_CREATE_SCHEME) {
-            scheme_len_array[4+(inp_scheme%4)] = strlen(parser_buffer);
-    		for (int i = 0; i < strlen(parser_buffer); i++){
-              switch (parser_buffer[i]){
-                case 'y':
-                  state_list[4+(inp_scheme%4)][i] = STATE_Y;
-                  break;
-                case 'r':
-                  state_list[4+(inp_scheme%4)][i] = STATE_R;
-                  break;
-                case 'g':
-                  state_list[4+(inp_scheme%4)][i] = STATE_G;
-                  break;
-                case 'n':
-                  state_list[4+(inp_scheme%4)][i] = STATE_N;
-                  break;
-              }
-            }
-
-            sprintf(write_buffer, "\nPlease input LED switching period. Enter 1 for for fast (200 ms), 2 for medium (500 ms), 3 for slow (1000 ms)\n");
-            
-          write_string(write_buffer);
-            clear_buffer();
-    	}
-    	else if (parser_res == PRSR_PERIOD){
-         switch (parser_buffer[0] - '0'){
-           case 1:
-             step_period_array[4+(inp_scheme%4)] = 200;
-             break;
-           case 2:
-             step_period_array[4+(inp_scheme%4)] = 500;
-             break;
-           case 3:
-             step_period_array[4+(inp_scheme%4)] = 1000;
-             break;
-         }
-          sprintf(write_buffer, "\nNew scheme number: %d\n", (4+(inp_scheme%4)));
-          
-          write_string(write_buffer);
-          inp_scheme += 1;
-          clear_buffer();
-        }
-        else if (parser_res == PRSR_CHANGE_SCHEME){
-           color_scheme = parser_buffer[0] - '0';
-           state_id = 0;
-
-          sprintf(write_buffer, "\nColor scheme: %d, period: %d\n", color_scheme, step_period_array[color_scheme]);
-          
-          write_string(write_buffer);
-          clear_buffer();
-        }
-        else if (parser_res == PRSR_INTER) {
-            // Check the content of parser_buffer for 'on' or 'off'
-            if (strstr(parser_buffer, "on") != NULL) {
-                // Switch to IRQ driver
-                // Assume we have a function to switch drivers
-                if (switch_to_irq_driver() == 0) { // Success
-                    sprintf(write_buffer, "Switched to IRQ mode\n");
-                    write_string(write_buffer);
-                } else { // Failure
-                    sprintf(write_buffer, "\nFailed to switch to IRQ mode\n");
-                    write_string(write_buffer);
-                }
-            } else if (strstr(parser_buffer, "off") != NULL) {
-                // Switch to Polling driver
-                // Assume we have a function to switch drivers
-                if (switch_to_polling_driver() == 0) { // Success
-                    sprintf(write_buffer, "\nSwitched to Polling mode\n");
-                    write_string(write_buffer);
-                } else { // Failure
-                    sprintf(write_buffer, "\nFailed to switch to Polling mode\n");
-                    
-          write_string(write_buffer);
-                }
-            } else {
-                 sprintf(write_buffer, "\nInvalid argument for 'set interrupts'. Use 'on' or 'off'.\n");
-          write_string(write_buffer);
-                 
-            }
-        }
   }
   /* USER CODE END 3 */
 }

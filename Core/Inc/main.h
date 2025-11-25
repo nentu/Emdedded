@@ -37,6 +37,7 @@ extern "C" {
 #include "my_gpio.h"
 #include "uart_io.h"
 #include "parser.h"
+#include "light_controller.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
