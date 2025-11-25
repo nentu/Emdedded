@@ -12,6 +12,6 @@
 
 int mode_power[10];
 
-void set_mode(int mode_num);
+void choose_mode(int mode_num);
 
 #endif /* INC_LIGHT_MODEL_CONTRILLER_H_ */
