@@ -19,7 +19,7 @@ enum ProgramState {
     POWER
 };
 
-void keyboard(int btn_id);
+void keyboard(int btn_id, int mode);
 
 
 #endif /* INC_KEYBOARD_LOGIC_H_ */

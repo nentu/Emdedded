@@ -100,6 +100,8 @@ int main(void)
   uint32_t tick_count = 0;
   char write_buffer[200];
   char input_symbol;
+  int mode = 0;
+  int btn_id;
 
   /* USER CODE END 2 */
 
@@ -112,12 +114,26 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-      HAL_StatusTypeDef read_res = read_char(&input_symbol);
-      if (read_res != HAL_OK)
-    	  continue;
-      sprintf(write_buffer, "%c", input_symbol);
-      write_string(write_buffer);
-      change_color(input_symbol);
+    
+    //TODO read and parse keyboard input
+    GPIO_PinState btn_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
+    if ( btn_state == GPIO_PIN_RESET) {
+      if (mode == 1) {
+        mode = 0;
+      }
+      else{
+        mode = 1;
+      }
+    }
+    read_keyboard(&btn_id);
+    keyboard(btn_id, mode);
+
+      // HAL_StatusTypeDef read_res = read_char(&input_symbol);
+      // if (read_res != HAL_OK)
+    	//   continue;
+      // sprintf(write_buffer, "%c", input_symbol);
+      // write_string(write_buffer);
+      // change_color(input_symbol);
 
   /* USER CODE END 3 */
 }
