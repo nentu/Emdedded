@@ -8,6 +8,18 @@
 #ifndef INC_KEYBOARD_LOGIC_H_
 #define INC_KEYBOARD_LOGIC_H_
 
+#include "keyboard_driver.h"
+
+enum ProgramState {
+    TESTING,
+    SETUP,
+    WORK,
+    STATE,
+    COLOR,
+    POWER
+};
+
+void keyboard(int btn_id);
 
 
 #endif /* INC_KEYBOARD_LOGIC_H_ */
