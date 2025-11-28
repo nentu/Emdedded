@@ -126,6 +126,7 @@ int main(void)
       }
     }
     read_keyboard(&btn_id);
+    if (btn_id == -1) continue;
     keyboard(btn_id, mode);
 
       // HAL_StatusTypeDef read_res = read_char(&input_symbol);
