@@ -49,7 +49,62 @@ void kb_get_status(I2C_HandleTypeDef * i2c, uint8_t** kb_matrix){
 	for (int row_i=0; row_i<4; row_i++){
 		kb_read_row(i2c, row_i, &row_reg);
 		for (int col_i=0; col_i<3; col_i++){
-			kb_matrix[row_i][col_i] = (row_reg >> (col_i + 4)) & 1;
+			kb_matrix[row_i][col_i] = 1 - ((row_reg >> (col_i + 4)) & 1);
 		}
 	}
+}
+
+uint8_t** createMatrix(int rows, int cols) {
+	  uint8_t** matrix = malloc(rows * sizeof(uint8_t*));
+    for (int i = 0; i < rows; i++) {
+        matrix[i] = malloc(cols * sizeof(uint8_t));
+    }
+    return matrix;
+}
+
+uint8_t** prev_kb_state;
+uint8_t** cur_kb_state;
+
+
+int read_keyboard(I2C_HandleTypeDef * i2c){
+    static int initialized = 0;
+
+    // Initialize previous state to all zeros on first call
+    if (!initialized) {
+		prev_kb_state = createMatrix(4, 3);
+		cur_kb_state = createMatrix(4, 3);
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 3; j++) {
+                prev_kb_state[i][j] = 0;
+            }
+        }
+        initialized = 1;
+    }
+
+    // 1) Get current keyboard state
+    kb_get_status(i2c, cur_kb_state);
+
+    int pressed_key = -1;  // -1 means no key or multiple keys pressed
+    int press_count = 0;
+
+    // 2) Compare with previous state
+    for (int row = 0; row < 4; row++) {
+        for (int col = 0; col < 3; col++) {
+            // 3) Check if key was 0 and became 1
+            if (prev_kb_state[row][col] == 0 && cur_kb_state[row][col] == 1) {
+                press_count++;
+                pressed_key = row * 3 + col; // Calculate index: 0-11
+            }
+        }
+    }
+
+    // Update previous state for next call
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 3; j++) {
+            prev_kb_state[i][j] = cur_kb_state[i][j];
+        }
+    }
+
+    // Return key index only if exactly one key was pressed
+    return (press_count == 1) ? pressed_key : -1;
 }
