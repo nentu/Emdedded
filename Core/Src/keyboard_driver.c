@@ -30,7 +30,7 @@ HAL_StatusTypeDef kb_read_reg(I2C_HandleTypeDef * i2c, uint16_t MemAddress, uint
 
 void kb_select_row(I2C_HandleTypeDef * i2c, uint8_t row) {
 	uint8_t bin_mask = (uint8_t) (1 << row);
-	kb_write_reg(i2c, KB_CONFIG_REG, ~bin_mask);
+//	kb_write_reg(i2c, KB_CONFIG_REG, ~bin_mask);
 	kb_write_reg(i2c, KB_OUTPUT_REG, ~bin_mask);
 }
 
@@ -39,4 +39,17 @@ void kb_read_row(I2C_HandleTypeDef * i2c, uint8_t row, uint8_t *res){
 	kb_select_row(i2c, row);
 	HAL_Delay(1);
 	kb_read_reg(i2c, KB_INPUT_REG, res);
+}
+
+
+
+void kb_get_status(I2C_HandleTypeDef * i2c, uint8_t** kb_matrix){
+	uint8_t row_reg;
+
+	for (int row_i=0; row_i<4; row_i++){
+		kb_read_row(i2c, row_i, &row_reg);
+		for (int col_i=0; col_i<3; col_i++){
+			kb_matrix[row_i][col_i] = (row_reg >> (col_i + 4)) & 1;
+		}
+	}
 }

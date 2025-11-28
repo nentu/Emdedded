@@ -57,6 +57,9 @@ void SystemClock_Config(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
+
+
+
 /* USER CODE END 0 */
 
 /**
@@ -101,19 +104,63 @@ int main(void)
   char write_buffer[200];
   char input_symbol;
 
+
+  void printBinary(uint8_t num) {
+      for (int i = sizeof(uint8_t) * 8 - 1; i >= 0; i--) {
+          sprintf(write_buffer, "%d", (num >> i) & 1);
+          write_string(write_buffer);
+      }
+      sprintf(write_buffer, "\n");
+      write_string(write_buffer);
+  }
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   clear_lights();
 //    	set_light_power(RED, (phase + 50) % 100);
+  void print_keyboard(uint8_t** kb_state){
+	  sprintf(write_buffer, "--------------\n");
+	  write_string(write_buffer);
+		for (int row_i=0; row_i<4; row_i++){
+			for (int col_i=0; col_i<3; col_i++){
+				sprintf(write_buffer, "%d\t", kb_state[row_i][col_i]);
+				write_string(write_buffer);
+			}
+			sprintf(write_buffer, "\n");
+			write_string(write_buffer);
+		}
+  }
+  uint8_t** createMatrix(int rows, int cols) {
+	  uint8_t** matrix = malloc(rows * sizeof(uint8_t*));
+      for (int i = 0; i < rows; i++) {
+          matrix[i] = malloc(cols * sizeof(uint8_t));
+      }
+      return matrix;
+  }
+  kb_init(&hi2c1);
+  uint8_t** kb_status = createMatrix(4, 3);;
   while (1)
   {
     /* USER CODE END WHILE */
-
     /* USER CODE BEGIN 3 */
-	uint8_t row_status;
-	kb_read_row(&hi2c1, 0, &row_status);
+    uint8_t row_status = 0;
+    if (HAL_GetTick() - tick_count >= 100) {
+    	tick_count = HAL_GetTick();
+    	kb_get_status(&hi2c1, kb_status);
+		sprintf(write_buffer, "\n%d\n", kb_status[0][0]);
+		write_string(write_buffer);
+    	print_keyboard(kb_status);
+
+    	uint8_t row_status;
+    	for (int i=0; i<4; i++){
+        	kb_read_row(&hi2c1, i, &row_status);
+        	printBinary((row_status >> 4) & 0x7);
+    	}
+
+
+    }
+
   }
   /* USER CODE END 3 */
 }

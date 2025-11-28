@@ -26,4 +26,5 @@ btn_id:
 int read_keyboard();
 void kb_read_row(I2C_HandleTypeDef * i2c, uint8_t row, uint8_t *res);
 void kb_init(I2C_HandleTypeDef * i2c);
+void kb_get_status(I2C_HandleTypeDef * i2c, uint8_t** kb_matrix);
 #endif /* INC_KEYBOARD_H_ */
