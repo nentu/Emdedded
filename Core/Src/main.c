@@ -135,9 +135,10 @@ int main(void)
     GPIO_PinState btn_state = HAL_GPIO_ReadPin(GPIOC, GPIO_PIN_15);
 
     if (HAL_GetTick() - tick_count >= 100) {
-        if ( btn_state == GPIO_PIN_RESET) {
+       if (getBtnState() == BTN_CLICKED)
         	mode = 1 - mode;
-        }
+        
+        
 
     	tick_count = HAL_GetTick();
     	btn_id = read_keyboard(&hi2c1);
