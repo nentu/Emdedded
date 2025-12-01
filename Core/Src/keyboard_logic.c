@@ -49,7 +49,7 @@ void keyboard(int btn_id, int mode) {
             if (btn_id > 0 && btn_id <= 9){
                 cur_color_state = btn_id;
                 cur_program_state = COLOR;
-                sprintf(write_buffer, "\n %d state choosed\n Choose color: a - Green, b -Yellow, c - Red\n", cur_color_state);
+                sprintf(write_buffer, "\n %d state choosed\n Choose color: 1 - Green, 2 -Yellow, 3 - Red\n", cur_color_state);
                 write_string(write_buffer);
             }
             else {
@@ -68,7 +68,7 @@ void keyboard(int btn_id, int mode) {
             else if (btn_id == 3){
                 cur_color = RED;
             } else{
-                sprintf(write_buffer, "\n Wrong symbol\n Choose color: a - Green, b -Yellow, c - Red\n", cur_color_state);
+                sprintf(write_buffer, "\n Wrong symbol\n Choose color: 1 - Green, 2 -Yellow, 3 - Red\n", cur_color_state);
                 write_string(write_buffer);
                 return;
             }
