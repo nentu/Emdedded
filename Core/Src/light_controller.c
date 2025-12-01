@@ -17,13 +17,13 @@ int set_light_power(enum BtnColor btn, int power){
 	
 
 	if (btn == GREEN){
-    	green_pow = (power * 5);
+    	green_pow = (power);
 	}
 	if (btn == RED){
-    	yellow_pow = (power * 5);
+    	yellow_pow = (power);
 	}
 	if (btn == YELLOW){
-    	red_pow = (power * 5);
+    	red_pow = (power);
 	}
 
 	htim4.Instance->CCR2 = green_pow;
