@@ -1,5 +1,6 @@
 #include "keyboard_logic.h"
 #include "light_controller.h"
+#include "utils.h"
 
 enum ProgramState cur_program_state = WORK;
 enum BtnColor cur_color;
