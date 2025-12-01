@@ -75,7 +75,7 @@ void keyboard(int btn_id, int mode) {
             color_model[cur_color_state].color = cur_color;
             cur_program_state = POWER;
 
-            sprintf(write_buffer, "\n %s color choosed\n Enter + for more light, And - for less light\nCur power: %d\n", ColorStrings[cur_color], color_model[cur_color_state].power);
+            sprintf(write_buffer, "\n %s color choosed\n Press 1 for more light, Press 2 for less light\nCur power: %d\n", ColorStrings[cur_color], color_model[cur_color_state].power);
             write_string(write_buffer);
         }
         else if (cur_program_state == POWER) {
@@ -86,12 +86,12 @@ void keyboard(int btn_id, int mode) {
             }
             else if(btn_id == 1){
                 color_model[cur_color_state].power = min(color_model[cur_color_state].power + 10, 100);
-                sprintf(write_buffer, "\n %d power\n Enter + for more light, And - for less light\n", color_model[cur_color_state].power);
+                sprintf(write_buffer, "\n %d power\n Press 1 for more light, Press 2 for less light\n", color_model[cur_color_state].power);
                 write_string(write_buffer);
             }
             else if(btn_id == 2){
                 color_model[cur_color_state].power = max(color_model[cur_color_state].power - 10, 0);
-                sprintf(write_buffer, "\n %d power\n Enter + for more light, And - for less light\n", color_model[cur_color_state].power);
+                sprintf(write_buffer, "\n %d power\n Press 1 for more light, Press 2 for less light\n", color_model[cur_color_state].power);
                 write_string(write_buffer);
             }
         }
